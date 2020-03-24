@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace EasyFinance.Interfaces
+namespace EasyFinance.OCR.Interfaces
 {
-    public interface IOCRProcessor
+    public interface IOCRService
     {
         string GetText(Image image);
     }

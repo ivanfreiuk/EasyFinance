@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EasyFinance.BusinessLogic.Models
+﻿namespace EasyFinance.DataAccess.Entities
 {
     public class ReceiptPhoto
     {

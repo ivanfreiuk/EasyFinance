@@ -6,16 +6,18 @@ using EasyFinance.Builders;
 using EasyFinance.BusinessLogic.Interfaces;
 using EasyFinance.BusinessLogic.Services;
 using EasyFinance.Constans;
+using EasyFinance.DataAccess.Context;
 using EasyFinance.Helpers;
 using EasyFinance.Interfaces;
+using EasyFinance.OCR.Interfaces;
+using EasyFinance.OCR.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace EasyFinance
 {
@@ -34,15 +36,24 @@ namespace EasyFinance
             var customVisionSecrets = Configuration.GetSection("CustomVisionSecrets");
             services.Configure<CustomVisionSecrets>(customVisionSecrets);
 
+            #region Add Entity Framework
 
+            services.AddDbContext<EasyFinanceDbContext>(options =>
+            {
+                options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EasyFinanceDB;Trusted_Connection=True;",
+                    b => b.MigrationsAssembly("EasyFinance"));
+            });
+
+            #endregion
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Add DI for application services
-
             services.AddTransient<IReceiptPhotoService, ReceiptPhotoService>();
+            services.AddTransient<IReceiptService, ReceiptService>();
             services.AddTransient<IReceiptHelper, ReceiptHelper>();
-            services.AddTransient<IOCRProcessor, TesseractOCRProcessor>();
+            services.AddTransient<IFileHelper, FileHelper>();
+            services.AddTransient<IOCRService, TesseractOCRService>();
             // BUILDERS
             services.AddTransient<IReceiptObjectBuilder, ReceiptObjectBuilder>();
 

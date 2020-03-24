@@ -1,15 +1,16 @@
 ﻿using System.Drawing;
-using EasyFinance.Interfaces;
+using EasyFinance.OCR.Helpers;
+using EasyFinance.OCR.Interfaces;
 using Tesseract;
 
-namespace EasyFinance.Helpers
+namespace EasyFinance.OCR.Services
 {
-    public class TesseractOCRProcessor: IOCRProcessor
+    public class TesseractOCRService: IOCRService
     {
         private readonly TesseractEngine _tesseractEngine;
         private readonly string _tessdataPath = @"C:\Users\Ivan_Freiuk\Desktop\DIPLOMA\tessdata";
 
-        public TesseractOCRProcessor()
+        public TesseractOCRService()
         {
             _tesseractEngine = new TesseractEngine(_tessdataPath, "ukr", EngineMode.Default);
         }

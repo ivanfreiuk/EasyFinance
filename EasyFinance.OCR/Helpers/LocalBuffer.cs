@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace EasyFinance.Helpers
+namespace EasyFinance.OCR.Helpers
 {
     public class LocalBuffer
     {

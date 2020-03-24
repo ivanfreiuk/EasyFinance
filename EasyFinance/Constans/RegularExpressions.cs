@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace EasyFinance.Constans
+﻿namespace EasyFinance.Constans
 {
-    public static class RegularExpressionConstants
+    public static class RegularExpressions
     {
         public const string DATETIME_PATTERN = @"(\d+)[-.\/](\d+)[-.\/](\d+)\s+((?:0?[0-9]|1[0-9]|2[0-3])[.:][0-5][0-9])?";
 

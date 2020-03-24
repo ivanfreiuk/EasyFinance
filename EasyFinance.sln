@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyFinance", "EasyFinance\EasyFinance.csproj", "{C71916D1-171E-4B83-A7A1-EA619A3459C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyFinance", "EasyFinance\EasyFinance.csproj", "{C71916D1-171E-4B83-A7A1-EA619A3459C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyFinance.DataAccess", "EasyFinance.DataAccess\EasyFinance.DataAccess.csproj", "{EE4A19CD-5924-4C33-B1EE-F6F77955B7B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyFinance.BusinessLogic", "EasyFinance.BusinessLogic\EasyFinance.BusinessLogic.csproj", "{589E448C-240B-4828-BB6A-CF9179C8FBF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyFinance.OCR", "EasyFinance.OCR\EasyFinance.OCR.csproj", "{8AA04573-46BF-42F6-A1B3-AE170A6E2650}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{C71916D1-171E-4B83-A7A1-EA619A3459C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C71916D1-171E-4B83-A7A1-EA619A3459C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C71916D1-171E-4B83-A7A1-EA619A3459C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE4A19CD-5924-4C33-B1EE-F6F77955B7B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE4A19CD-5924-4C33-B1EE-F6F77955B7B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE4A19CD-5924-4C33-B1EE-F6F77955B7B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE4A19CD-5924-4C33-B1EE-F6F77955B7B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{589E448C-240B-4828-BB6A-CF9179C8FBF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{589E448C-240B-4828-BB6A-CF9179C8FBF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{589E448C-240B-4828-BB6A-CF9179C8FBF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{589E448C-240B-4828-BB6A-CF9179C8FBF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA04573-46BF-42F6-A1B3-AE170A6E2650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA04573-46BF-42F6-A1B3-AE170A6E2650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA04573-46BF-42F6-A1B3-AE170A6E2650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA04573-46BF-42F6-A1B3-AE170A6E2650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,7 +25,7 @@ namespace EasyFinance.Builders
 
         public IReceiptObjectBuilder BuildTotalAmount(string text)
         {
-            var totalPattern = @"(С[аоу]м[а]|Картка):?\s*(\d+\s?.\s?\d{2})";
+            var totalPattern = @"(С[аоу]м[а]|Картка):?\s*(\d+\s?[.:;]\s?\d{2})";
             var totalMatch = GetFirstSuccessMatch(totalPattern, text);
 
             var totalText = totalMatch
@@ -43,7 +43,7 @@ namespace EasyFinance.Builders
         {
             //string datetimePattern = @"(\d+)[-.\/](\d+)[-.\/](\d+)\s+((?:0?[0-9]|1[0-9]|2[0-3])[.:][0-5][0-9]$)?";
 
-            var datetime = GetFirstSuccessMatch(RegularExpressionConstants.DATETIME_PATTERN, text)?.Value;//$"{date} {time}";
+            var datetime = GetFirstSuccessMatch(RegularExpressions.DATETIME_PATTERN, text)?.Value;//$"{date} {time}";
 
             _receipt.PurchaseDate = DateTime.TryParse(datetime, out var result) ? result :  (DateTime?) null;
 
