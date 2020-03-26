@@ -71,23 +71,19 @@ namespace EasyFinance.Controllers
             }
         }
 
-        public byte[] ImageToByteArray(Image image)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePhoto(int id)
         {
-            var stream = new MemoryStream();
-            image.Save(stream, image.RawFormat);
-            return stream.ToArray();
+            var photo = await _receiptPhotoService.GetReceiptPhotoAsync(id);
+
+            if (photo == null)
+            {
+                return BadRequest();
+            }
+
+            await _receiptPhotoService.RemoveReceiptPhotoAsync(photo);
+
+            return NoContent();
         }
-
-        //// PUT: api/ReceiptPhotoes/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

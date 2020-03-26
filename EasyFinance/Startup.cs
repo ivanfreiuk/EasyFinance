@@ -1,4 +1,6 @@
-﻿using EasyFinance.BusinessLogic.Builders;
+﻿using EasyFinance.Builders;
+using EasyFinance.Builders.Interfaces;
+using EasyFinance.BusinessLogic.Builders;
 using EasyFinance.BusinessLogic.Builders.Interfaces;
 using EasyFinance.BusinessLogic.Interfaces;
 using EasyFinance.BusinessLogic.Services;
@@ -52,10 +54,13 @@ namespace EasyFinance
             services.AddTransient<ICurrencyService, CurrencyService>();
             services.AddTransient<IReceiptHelper, ReceiptHelper>();
             services.AddTransient<IFileHelper, FileHelper>();
-            services.AddTransient<IOCRService, TesseractOCRService>();
+            services.AddSingleton<IOCRService, TesseractOCRService>();
             // BUILDERS
             services.AddTransient<IReceiptObjectBuilder, ReceiptObjectBuilder>();
             services.AddTransient<IReceiptObjectDirector, ReceiptObjectDirector>();
+            services.AddTransient<IReceiptScanTextBuilder, ReceiptScanTextBuilder>();
+            services.AddTransient<IReceiptScanTextDirector, ReceiptScanTextDirector>();
+            
 
             #endregion
         }

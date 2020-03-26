@@ -20,6 +20,7 @@ namespace EasyFinance.BusinessLogic.Services
         public async Task<Receipt> GetReceiptAsync(int id)
         {
             return await _context.Receipts
+                .Include(r => r.PaymentMethod)
                 .Include(r => r.Category)
                 .Include(r => r.Currency)
                 .FirstOrDefaultAsync(r => r.Id == id);

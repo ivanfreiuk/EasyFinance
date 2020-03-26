@@ -45,15 +45,6 @@ namespace EasyFinance.BusinessLogic.Services
             await _context.SaveChangesAsync();
         }
 
-
-
-        public byte[] ImageToByteArray(Image image)
-        {
-            var stream = new MemoryStream();
-            image.Save(stream, image.RawFormat);
-            return stream.ToArray();
-        }
-
         private List<ReceiptPhoto> receiptPhotos = new List<ReceiptPhoto>
         {
             new ReceiptPhoto{ ReceiptId = 1, FileName = @"C:\Users\Ivan_Freiuk\Desktop\DIPLOMA\receipts\DIPLOMA.jpg"},

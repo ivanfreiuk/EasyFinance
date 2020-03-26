@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using EasyFinance.Builders.Interfaces;
 using EasyFinance.BusinessLogic.Builders.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using EasyFinance.BusinessLogic.Interfaces;
-using EasyFinance.BusinessLogic.Models;
 using EasyFinance.Constans;
 using EasyFinance.DataAccess.Entities;
 using EasyFinance.Interfaces;
@@ -21,23 +21,23 @@ namespace EasyFinance.Controllers
         private readonly CustomVisionSecrets _cvSecrets;
         private readonly IReceiptPhotoService _receiptPhotoSvc;
         private readonly IReceiptHelper _receiptHelper;
-        private readonly IOCRService _ocrService;
         private readonly IReceiptObjectDirector _receiptDirector;
+        private readonly IReceiptScanTextDirector _scanTextDirector;
         private readonly IReceiptService _receiptService;
         private readonly IFileHelper _fileHelper;
 
         public ReceiptsController(IReceiptPhotoService receiptPhotoSvc,
             IReceiptHelper receiptHelper,
-            IOCRService ocrService,
             IReceiptObjectDirector receiptDirector,
+            IReceiptScanTextDirector scanTextDirector,
             IReceiptService receiptService,
             IFileHelper fileHelper,
             IOptions<CustomVisionSecrets> options)
         {
             _receiptPhotoSvc = receiptPhotoSvc;
             _receiptHelper = receiptHelper;
-            _ocrService = ocrService;
             _receiptDirector = receiptDirector;
+            _scanTextDirector = scanTextDirector;
             _receiptService = receiptService;
             _fileHelper = fileHelper;
             _cvSecrets = options.Value;
@@ -80,7 +80,6 @@ namespace EasyFinance.Controllers
         [HttpPost]
         public async Task<IActionResult> StartReceiptProcessing([FromBody]int id)
         {
-            // BUILD TEMPLETE
             var receiptPhoto = await _receiptPhotoSvc.GetReceiptPhotoAsync(id);
 
             if (receiptPhoto == null)
@@ -92,14 +91,12 @@ namespace EasyFinance.Controllers
             var receiptSections = _receiptHelper.ExtractSections(imagePrediction.Predictions);
             var receiptTemplate = _receiptHelper.CreateReceiptTemplate(receiptSections);
 
-            // EXTRACT TEXT
+
             var image = _fileHelper.ByteArrayToImage(receiptPhoto.FileBytes);
-            var section =  _receiptHelper.CropReceiptSection(image, receiptTemplate.FooterSection.BoundingBox);
-           
-            var scanText = new ScanText {FooterContent = _ocrService.GetText(section)};
+            var scanText = _scanTextDirector.ConstructScanText(image, receiptTemplate);
             var receipt = _receiptDirector.ConstructReceipt(scanText);
 
-            // SAVE RECEIPT
+        
             await _receiptService.AddReceiptAsync(receipt);
 
             var receiptModel = await _receiptService.GetReceiptAsync(receipt.Id);
