@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EasyFinance.Builders;
+﻿using EasyFinance.BusinessLogic.Builders;
+using EasyFinance.BusinessLogic.Builders.Interfaces;
 using EasyFinance.BusinessLogic.Interfaces;
 using EasyFinance.BusinessLogic.Services;
 using EasyFinance.Constans;
@@ -51,11 +48,14 @@ namespace EasyFinance
             #region Add DI for application services
             services.AddTransient<IReceiptPhotoService, ReceiptPhotoService>();
             services.AddTransient<IReceiptService, ReceiptService>();
+            services.AddTransient<IPaymentMethodService, PaymentMethodService>();
+            services.AddTransient<ICurrencyService, CurrencyService>();
             services.AddTransient<IReceiptHelper, ReceiptHelper>();
             services.AddTransient<IFileHelper, FileHelper>();
             services.AddTransient<IOCRService, TesseractOCRService>();
             // BUILDERS
             services.AddTransient<IReceiptObjectBuilder, ReceiptObjectBuilder>();
+            services.AddTransient<IReceiptObjectDirector, ReceiptObjectDirector>();
 
             #endregion
         }

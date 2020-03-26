@@ -9,4 +9,8 @@
     <PackageReference Include="Tesseract" Version="3.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tessdata\" />
+  </ItemGroup>
+
 </Project>

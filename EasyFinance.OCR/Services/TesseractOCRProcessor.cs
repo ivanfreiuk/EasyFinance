@@ -8,7 +8,7 @@ namespace EasyFinance.OCR.Services
     public class TesseractOCRService: IOCRService
     {
         private readonly TesseractEngine _tesseractEngine;
-        private readonly string _tessdataPath = @"C:\Users\Ivan_Freiuk\Desktop\DIPLOMA\tessdata";
+        private readonly string _tessdataPath = @"C:\Users\Ivan_Freiuk\Desktop\DIPLOMA\repository\EasyFinance\EasyFinance.OCR\Tessdata";
 
         public TesseractOCRService()
         {

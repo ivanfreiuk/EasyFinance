@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Drawing;
-using System.Linq;
+﻿using System.IO;
 using System.Threading.Tasks;
+using EasyFinance.BusinessLogic.Builders.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using EasyFinance.BusinessLogic.Interfaces;
+using EasyFinance.BusinessLogic.Models;
 using EasyFinance.Constans;
 using EasyFinance.DataAccess.Entities;
 using EasyFinance.Interfaces;
@@ -24,14 +22,14 @@ namespace EasyFinance.Controllers
         private readonly IReceiptPhotoService _receiptPhotoSvc;
         private readonly IReceiptHelper _receiptHelper;
         private readonly IOCRService _ocrService;
-        private readonly IReceiptObjectBuilder _receiptBuilder;
+        private readonly IReceiptObjectDirector _receiptDirector;
         private readonly IReceiptService _receiptService;
         private readonly IFileHelper _fileHelper;
 
         public ReceiptsController(IReceiptPhotoService receiptPhotoSvc,
             IReceiptHelper receiptHelper,
             IOCRService ocrService,
-            IReceiptObjectBuilder receiptBuilder,
+            IReceiptObjectDirector receiptDirector,
             IReceiptService receiptService,
             IFileHelper fileHelper,
             IOptions<CustomVisionSecrets> options)
@@ -39,7 +37,7 @@ namespace EasyFinance.Controllers
             _receiptPhotoSvc = receiptPhotoSvc;
             _receiptHelper = receiptHelper;
             _ocrService = ocrService;
-            _receiptBuilder = receiptBuilder;
+            _receiptDirector = receiptDirector;
             _receiptService = receiptService;
             _fileHelper = fileHelper;
             _cvSecrets = options.Value;
@@ -84,6 +82,12 @@ namespace EasyFinance.Controllers
         {
             // BUILD TEMPLETE
             var receiptPhoto = await _receiptPhotoSvc.GetReceiptPhotoAsync(id);
+
+            if (receiptPhoto == null)
+            {
+                return BadRequest();
+            }
+
             var imagePrediction = await GetPredictionAsync(receiptPhoto.FileBytes);           
             var receiptSections = _receiptHelper.ExtractSections(imagePrediction.Predictions);
             var receiptTemplate = _receiptHelper.CreateReceiptTemplate(receiptSections);
@@ -91,14 +95,16 @@ namespace EasyFinance.Controllers
             // EXTRACT TEXT
             var image = _fileHelper.ByteArrayToImage(receiptPhoto.FileBytes);
             var section =  _receiptHelper.CropReceiptSection(image, receiptTemplate.FooterSection.BoundingBox);
-            string text = _ocrService.GetText(section);
+           
+            var scanText = new ScanText {FooterContent = _ocrService.GetText(section)};
+            var receipt = _receiptDirector.ConstructReceipt(scanText);
 
-            var receipt = _receiptBuilder.BuildPurchaseDate(text)
-                .BuildTotalAmount(text)
-                .GetReceipt();
-            //section.Save($"C:\\Users\\Ivan_Freiuk\\Desktop\\DIPLOMA\\CroppedReceipts\\{Guid.NewGuid()}.jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            // SAVE RECEIPT
+            await _receiptService.AddReceiptAsync(receipt);
 
-            return Ok(receipt);
+            var receiptModel = await _receiptService.GetReceiptAsync(receipt.Id);
+
+            return Ok(receiptModel);
         }
 
         [HttpPut("{id}")]
