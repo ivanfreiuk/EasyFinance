@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EasyFinance.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/receiptphotos")]
     [ApiController]
     public class ReceiptPhotosController : ControllerBase
     {

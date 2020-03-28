@@ -1,0 +1,93 @@
+<div class="bootstrap-wrapper">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="float-left" mat-dialog-title>Новий чек</h2>
+      <button mat-icon-button mat-dialog-close color="warn" class="float-right">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-md-7">
+        <div class="row">
+          <div class="col-md-12">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Торговець</mat-label>
+              <input matInput placeholder="Назва">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Дата покупки</mat-label>
+              <input matInput [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+            <mat-form-field appearance="outline" style="width: 200px;">
+              <mat-label>Сума</mat-label>
+              <input matInput placeholder="сума">
+              <mat-icon matSuffix>money</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="col-md-5">
+            <mat-form-field appearance="outline">
+              <mat-select>
+                <mat-option>-- валюта --</mat-option>
+                <mat-option *ngFor="let currency of currencySource" value="{{currency.id}}">{{currency.genericCode}}
+                </mat-option>
+              </mat-select>
+              <mat-label>Валюта</mat-label>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="outline">
+              <mat-select>
+                <mat-option>-- тип оплати --</mat-option>
+                <mat-option *ngFor="let paymentMethod of paymentMethodSource" value="{{paymentMethod.id}}">{{paymentMethod.name}}
+                </mat-option>
+              </mat-select>
+              <mat-label>Тип оплати</mat-label>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-select>
+                <mat-option>-- категорія --</mat-option>
+                <mat-option *ngFor="let category of categorySource" value="{{category.id}}">{{category.categoryName}}
+                </mat-option>
+              </mat-select>
+              <mat-label>Категорія</mat-label>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Коментар</mat-label>
+              <input matInput placeholder="коментар">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <h1>TEST</h1>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button color="primary">Сканувати <mat-icon>scanner</mat-icon></button>
+    <button mat-raised-button color="accent">Сторити <mat-icon>add</mat-icon></button>
+  </mat-dialog-actions>
+</div>

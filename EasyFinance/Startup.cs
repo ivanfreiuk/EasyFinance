@@ -45,6 +45,8 @@ namespace EasyFinance
 
             #endregion
 
+            services.AddCors();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             #region Add DI for application services
@@ -52,6 +54,7 @@ namespace EasyFinance
             services.AddTransient<IReceiptService, ReceiptService>();
             services.AddTransient<IPaymentMethodService, PaymentMethodService>();
             services.AddTransient<ICurrencyService, CurrencyService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IReceiptHelper, ReceiptHelper>();
             services.AddTransient<IFileHelper, FileHelper>();
             services.AddSingleton<IOCRService, TesseractOCRService>();
@@ -77,6 +80,11 @@ namespace EasyFinance
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseHttpsRedirection();
             app.UseMvc();

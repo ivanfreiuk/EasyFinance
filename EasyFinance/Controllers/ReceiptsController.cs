@@ -10,11 +10,11 @@ using EasyFinance.Interfaces;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Microsoft.Extensions.Options;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
-using EasyFinance.OCR.Interfaces;
+
 
 namespace EasyFinance.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/receipts")]
     [ApiController]
     public class ReceiptsController : ControllerBase
     {

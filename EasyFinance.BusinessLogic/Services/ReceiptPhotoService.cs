@@ -38,9 +38,9 @@ namespace EasyFinance.BusinessLogic.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveReceiptPhotoAsync(ReceiptPhoto receiptPhoto)
+        public async Task RemoveReceiptPhotoAsync(ReceiptPhoto photo)
         {
-            await Task.Run(() => _context.ReceiptPhotos.Remove(receiptPhoto));
+            await Task.Run(() => _context.ReceiptPhotos.Remove(photo));
 
             await _context.SaveChangesAsync();
         }
