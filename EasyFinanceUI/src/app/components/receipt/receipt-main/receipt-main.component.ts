@@ -16,6 +16,8 @@ export class ReceiptMainComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(ReceiptDialogComponent, {
+      maxHeight: '700px',
+      maxWidth: '900px',
       height: '90%',
       width: '70%',
     });

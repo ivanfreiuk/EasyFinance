@@ -18,18 +18,18 @@ namespace EasyFinance.DataAccess.Initializers
             builder.Entity<Category>()
                 .HasData(new List<Category>
                 {
-                    new Category {Id = 1, CategoryName = "Продукти"},
-                    new Category {Id = 2, CategoryName = "Сніданок"},
-                    new Category {Id = 3, CategoryName = "Обід"},
-                    new Category {Id = 4, CategoryName = "Вечеря"},
-                    new Category {Id = 5, CategoryName = "Таксі/Автобус"},
-                    new Category {Id = 6, CategoryName = "Потяг"},
-                    new Category {Id = 7, CategoryName = "Книги/Журнали"},
-                    new Category {Id = 8, CategoryName = "Подарунок"},
-                    new Category {Id = 9, CategoryName = "Дозвілля"},
-                    new Category {Id = 10, CategoryName = "Одяг"},
-                    new Category {Id = 11, CategoryName = "Бензин"},
-                    new Category {Id = 12, CategoryName = "Інше"},
+                    new Category {Id = 1, Name = "Продукти"},
+                    new Category {Id = 2, Name = "Сніданок"},
+                    new Category {Id = 3, Name = "Обід"},
+                    new Category {Id = 4, Name = "Вечеря"},
+                    new Category {Id = 5, Name = "Таксі/Автобус"},
+                    new Category {Id = 6, Name = "Потяг"},
+                    new Category {Id = 7, Name = "Книги/Журнали"},
+                    new Category {Id = 8, Name = "Подарунок"},
+                    new Category {Id = 9, Name = "Дозвілля"},
+                    new Category {Id = 10, Name = "Одяг"},
+                    new Category {Id = 11, Name = "Бензин"},
+                    new Category {Id = 12, Name = "Інше"},
                 });
         }
 

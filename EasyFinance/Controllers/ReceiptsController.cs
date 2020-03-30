@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using EasyFinance.Builders.Interfaces;
 using EasyFinance.BusinessLogic.Builders.Interfaces;
@@ -72,7 +73,14 @@ namespace EasyFinance.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateReceipt(Receipt receipt)
         {
-            await _receiptService.AddReceiptAsync(receipt);
+            try
+            {
+                await _receiptService.AddReceiptAsync(receipt);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
             return Ok(new { receipt.Id });
         }

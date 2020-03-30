@@ -8,14 +8,16 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import {MatSelectModule} from '@angular/material/select'
+import { MatSelectModule } from '@angular/material/select';
+import {MatCardModule} from '@angular/material/card';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { ReceiptMainComponent } from './receipt/receipt-main/receipt-main.component';
 import { ReceiptDialogComponent } from './receipt/receipt-dialog/receipt-dialog.component';
 import { ReceiptListComponent } from './receipt/receipt-list/receipt-list.component';
 import { SidenavComponent } from './common/sidenav/sidenav.component';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -26,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     HttpClientModule,
     MatToolbarModule,
     MatIconModule,
@@ -36,7 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
   ],
   exports: [
     HttpClientModule,
@@ -51,13 +55,14 @@ import { HttpClientModule } from '@angular/common/http';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
   ],
   entryComponents: [
     ReceiptDialogComponent
   ],
   providers: [
-    MatDatepickerModule
+    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
   ]
 })
 export class ComponentsModule { }
