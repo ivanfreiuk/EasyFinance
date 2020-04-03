@@ -47,7 +47,7 @@ namespace EasyFinance.Controllers
         {
             await _categoryService.AddCategoryAsync(category);
             
-            return Ok(new { category.Id });
+            return Ok(category.Id);
         }
 
         [HttpPut("{id}")]

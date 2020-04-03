@@ -1,5 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using EasyFinance.BusinessLogic.Interfaces;
 using EasyFinance.DataAccess.Entities;
@@ -35,6 +39,21 @@ namespace EasyFinance.Controllers
             return Ok(photo);
         }
 
+        [HttpGet("blob/{id}")]
+        public async Task<IActionResult> GetPhoto(int id)
+        {
+            var photo = await _receiptPhotoService.GetReceiptPhotoAsync(id);
+
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
+            var extension = photo.FileName.Substring(photo.FileName.IndexOf(".", StringComparison.Ordinal) + 1);
+
+            return File(photo.FileBytes, $"image/{extension}");
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetReceiptPhotos()
         {
@@ -66,7 +85,7 @@ namespace EasyFinance.Controllers
 
                     await _receiptPhotoService.AddReceiptPhotoAsync(receiptPhoto);
 
-                    return Ok(new {receiptPhoto.Id});
+                    return Ok(receiptPhoto.Id);
                 }
             }
         }

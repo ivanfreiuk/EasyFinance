@@ -82,7 +82,7 @@ namespace EasyFinance.Controllers
                 return BadRequest(e.Message);
             }
 
-            return Ok(new { receipt.Id });
+            return Ok(receipt.Id);
         }
 
         [HttpPost]

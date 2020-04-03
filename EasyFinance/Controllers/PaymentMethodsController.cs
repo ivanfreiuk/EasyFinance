@@ -47,7 +47,7 @@ namespace EasyFinance.Controllers
         {
             await _paymentService.AddPaymentMethodAsync(paymentMethod);
 
-            return Ok(new { paymentMethod.Id });
+            return Ok(paymentMethod);
         }
 
         [HttpPut("{id}")]

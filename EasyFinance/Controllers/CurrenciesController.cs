@@ -47,7 +47,7 @@ namespace EasyFinance.Controllers
         {
             await _currencyService.AddCurrencyAsync(currency);
 
-            return Ok(new { currency.Id });
+            return Ok(currency.Id);
         }
 
         [HttpPut("{id}")]

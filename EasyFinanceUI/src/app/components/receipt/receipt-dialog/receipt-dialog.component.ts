@@ -9,6 +9,8 @@ import { PaymentMethod } from 'src/app/models/payment-method';
 import { Receipt } from 'src/app/models/receipt';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ReceiptPhotoService } from 'src/app/services/receipt-photo.service';
+import { ReceiptPhoto } from 'src/app/models/receipt-photo';
 
 @Component({
   selector: 'app-receipt-dialog',
@@ -20,7 +22,10 @@ export class ReceiptDialogComponent implements OnInit {
   private categorySource: Array<Category>;
   private currencySource: Array<Currency>;
   private paymentMethodSource: Array<PaymentMethod>;
+
   private currentReceipt: Receipt = new Receipt();
+  private imageFile: File;
+  private imageURL: any = 'assets/images/photo_upload.svg';
 
   receiptForm: FormGroup;
 
@@ -28,6 +33,7 @@ export class ReceiptDialogComponent implements OnInit {
     private categorySvc: CategoryService,
     private currencySvc: CurrencyService,
     private paymentMethodSvc: PaymentMethodService,
+    private photoSvc: ReceiptPhotoService,
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<ReceiptDialogComponent>) {
     this.receiptForm = this.createFormGroup(this.currentReceipt);
@@ -46,14 +52,23 @@ export class ReceiptDialogComponent implements OnInit {
   ngOnInit() {
   }
 
+  onFileUpload() {
+    const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
+    fileUpload.onchange = () => {
+      this.imageFile = fileUpload.files[0];
+      this.setImageURL(this.imageFile);
+    };
+    fileUpload.click();
+  }
+
   onSave() {
-    if (this.receiptForm.valid) {
+    if (this.receiptForm.valid && !!this.imageFile) {
+      // NEW
       this.populateReceiptData();
-      console.log(this.receiptForm.valid);
-      console.log(this.currentReceipt);
-      this.receiptSvc.post(this.currentReceipt).subscribe(data => {
-        console.log(data)
-      })
+      this.photoSvc.post(this.imageFile).subscribe((id:number)=>{
+        this.currentReceipt.receiptPhotoId = id;
+        this.receiptSvc.post(this.currentReceipt).subscribe((id:number)=>{ console.log('CERATED'+id)})
+      });     
     } else {
       console.log("FORM INVALID")
     }
@@ -87,4 +102,11 @@ export class ReceiptDialogComponent implements OnInit {
     });
   }
 
+  setImageURL(file: File | Blob) {
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (_event) => {
+      this.imageURL = reader.result;
+    };
+  }
 }

@@ -8,17 +8,23 @@
 .float-left {
     float: left;
 }
+mat-dialog-content {
+    margin: 1% auto;
+}
+mat-form-field {
+    width: 100%;
+}
+mat-card {
+    margin: 5% auto;
+    width: 100%;
+}
+mat-card img {
+    max-height: 400px;
+    max-width: 100%;
+    margin: auto;
+}
 
-.upload-btn-wrapper {
-    position: relative;
-    overflow: hidden;
-    display: inline;
-  }
-    
-  .upload-btn-wrapper input[type=file] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-  }
+
+
+
+

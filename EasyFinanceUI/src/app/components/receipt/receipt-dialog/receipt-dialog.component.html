@@ -14,14 +14,14 @@
         <div class="col-md-7">
           <div class="row">
             <div class="col-md-12">
-              <mat-form-field appearance="outline" class="full-width">
+              <mat-form-field appearance="outline">
                 <mat-label>Торговець</mat-label>
                 <input matInput placeholder="Назва" formControlName="merchant">
               </mat-form-field>
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <mat-form-field appearance="outline">
                 <mat-label>Дата покупки</mat-label>
                 <input matInput [matDatepicker]="picker" formControlName="purchaseDate">
@@ -31,14 +31,14 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-5">
-              <mat-form-field appearance="outline" style="width: 200px;">
+            <div class="col-md-6">
+              <mat-form-field appearance="outline">
                 <mat-label>Сума</mat-label>
                 <input matInput placeholder="сума" formControlName="totalAmount">
                 <mat-icon matSuffix>money</mat-icon>
               </mat-form-field>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6">
               <mat-form-field appearance="outline">
                 <mat-select formControlName="currency">
                   <mat-option>-- валюта --</mat-option>
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <mat-form-field appearance="outline">
                 <mat-select formControlName="paymentMethod">
                   <mat-option>-- тип оплати --</mat-option>
@@ -64,7 +64,7 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <mat-form-field appearance="outline" class="full-width">
+              <mat-form-field appearance="outline">
                 <mat-select formControlName="category">
                   <mat-option>-- категорія --</mat-option>
                   <mat-option *ngFor="let category of categorySource" value="{{category.id}}">{{category.name}}
@@ -75,8 +75,8 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
-              <mat-form-field appearance="outline" class="full-width">
+            <div class="col-md-12">
+              <mat-form-field appearance="outline">
                 <mat-label>Коментар</mat-label>
                 <input matInput placeholder="коментар" formControlName="description">
               </mat-form-field>
@@ -84,15 +84,13 @@
           </div>
         </div>
         <div class="col-md-5">
-          <mat-card style="width: 90%;">
-            <img mat-card-image src="assets/images/photo_upload.svg">
+          <mat-card>
+            <img mat-card-image [src]="imageURL" *ngIf="imageURL">
             <mat-card-actions>
-              <div class="upload-btn-wrapper">
-                <button mat-stroked-button color="primary" style="width:50%;"> 
-                  <mat-icon>add_photo_alternate</mat-icon>
-                </button>
-                <input type="file" name="fileUpload"/>
-              </div>              
+              <button mat-stroked-button color="primary" style="width:50%;" (click)="onFileUpload()">
+                <mat-icon>add_photo_alternate</mat-icon>
+              </button>
+              <input type="file" id="fileUpload" name="fileUpload" accept="image/*" style="display:none;" />
               <button mat-stroked-button color="primary" style="width: 50%;">
                 <mat-icon>photo_camera</mat-icon>
               </button>
@@ -101,7 +99,7 @@
         </div>
       </div>
     </mat-dialog-content>
-    <mat-dialog-actions>
+    <mat-dialog-actions align="end">
       <button mat-raised-button color="primary" (click)="onRunAutoScanning()">Сканувати <mat-icon>scanner</mat-icon>
       </button>
       <button mat-raised-button color="accent" (click)="onSave()">Зберегти <mat-icon>save</mat-icon></button>
