@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace EasyFinance
 {
@@ -47,7 +48,10 @@ namespace EasyFinance
 
             services.AddCors();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
             #region Add DI for application services
             services.AddTransient<IReceiptPhotoService, ReceiptPhotoService>();
@@ -63,9 +67,11 @@ namespace EasyFinance
             services.AddTransient<IReceiptObjectDirector, ReceiptObjectDirector>();
             services.AddTransient<IReceiptScanTextBuilder, ReceiptScanTextBuilder>();
             services.AddTransient<IReceiptScanTextDirector, ReceiptScanTextDirector>();
-            
+            services.AddTransient<IMapperFactory, MapperFactory>();
 
             #endregion
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

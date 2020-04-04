@@ -18,12 +18,21 @@ mat-card {
     margin: 5% auto;
     width: 100%;
 }
+mat-card .image-wrapper {
+    /* background-image: url('/assets/images/photo_upload.svg');
+    background-repeat: no-repeat;
+    background-position: center; */
+    height: 400px;
+    max-width: 100%;
+    margin: auto;
+} 
+
 mat-card img {
+    height: auto;
     max-height: 400px;
     max-width: 100%;
     margin: auto;
 }
-
 
 
 

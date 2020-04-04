@@ -1,0 +1,31 @@
+mat-card {
+    margin: 5% auto;
+    width: 300px;
+    height: auto;
+}
+/* mat-card-content {
+    margin: 2% auto;
+}
+
+mat-card img {
+    max-height: 400px;
+    max-width: 100%;
+    margin: auto;
+} */
+
+mat-card .image-wrapper {
+    /* background-image: url('/assets/images/photo_upload.svg');
+    background-repeat: no-repeat;
+    background-position: center; */
+    height: 400px;
+    max-width: 100%;
+    margin: auto;
+    margin-bottom: 20px;
+} 
+
+mat-card img {
+    height: auto;
+    max-height: 400px;
+    max-width: 100%;
+    margin: auto;
+}

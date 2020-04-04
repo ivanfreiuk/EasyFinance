@@ -66,7 +66,7 @@ namespace EasyFinance.Controllers
             {
                 return NoContent();
             }
-
+            
             return Ok(receipts);
         }
 
@@ -104,7 +104,7 @@ namespace EasyFinance.Controllers
             var scanText = _scanTextDirector.ConstructScanText(image, receiptTemplate);
             var receipt = _receiptDirector.ConstructReceipt(scanText);
 
-        
+            receipt.ReceiptPhotoId = id;
             await _receiptService.AddReceiptAsync(receipt);
 
             var receiptModel = await _receiptService.GetReceiptAsync(receipt.Id);

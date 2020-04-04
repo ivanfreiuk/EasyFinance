@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Receipt } from '../models/receipt';
-import { environment } from 'src/environments/environment';
+import { FileHelper } from 'src/app/helpers/file-helper';
+import { ReceiptView } from 'src/app/models/receipt-view';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +13,30 @@ export class ReceiptService {
 
   private apiUrl: string = 'https://localhost:44398/api';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private fileHelper: FileHelper) { }
 
-  getAll(): Observable<Receipt[]> {
-    return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`)
+  getAll(): Observable<ReceiptView[]> {
+    return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`).pipe<ReceiptView[]>(
+      map((data: Receipt[]) => {
+        let receipts = new Array<ReceiptView>();
+        data.forEach((receipt: Receipt) => {
+          let receiptView = new ReceiptView();
+          receiptView.id = receipt.id;
+          receiptView.imageURL = receipt.receiptPhotoId ? 
+          this.fileHelper.getImageSafeURL(receipt.receiptPhoto.fileBytes, receipt.receiptPhoto.fileName) : null;
+          receiptView.merchant = receipt.merchant;
+          receiptView.categoryName = receipt.categoryId ? receipt.category.name : null;
+          receiptView.paymentMethodName = receipt.paymentMethodId ? receipt.paymentMethod.name : null;
+          receiptView.totalAmount = receipt.totalAmount;
+          receiptView.currencyName = receipt.categoryId ? receipt.currency.name : null;
+          receiptView.purchaseDate = receipt.purchaseDate;
+          receiptView.description = receipt.description;
+
+          receipts.push(receiptView);
+        });
+        return receipts;
+      })
+    )
   }
 
   getById(id: number): Observable<Receipt> {
@@ -23,6 +45,10 @@ export class ReceiptService {
 
   post(receipt: Receipt) {
     return this.http.post(`${this.apiUrl}/receipts/create`, receipt);
+  }
+
+  autoScan(photoId:number) {
+    return this.http.post(`${this.apiUrl}/receipts`, photoId);
   }
 
   update(receipt: Receipt) {

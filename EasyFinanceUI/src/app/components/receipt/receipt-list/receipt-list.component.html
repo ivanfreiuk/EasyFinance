@@ -1,3 +1,26 @@
-<p>
-  receipt-list works!
-</p>
+<div class="bootstrap-wrapper">
+  <div class="row">
+    <div class="col-md-3" *ngFor="let receipt of receiptSource">
+      <mat-card>
+        <div class="image-wrapper">
+          <img mat-card-image [src]="receipt.imageURL" *ngIf="receipt.imageURL">
+        </div>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          <p><strong>Продовець :</strong> {{receipt.merchant}}</p>
+          <p><strong>Категорія :</strong> {{receipt.categoryName}}</p>
+          <p><strong>Коментар :</strong> {{receipt.description}}</p>
+          <p><strong>Дата покупки :</strong> {{receipt.purchaseDate}}</p>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button mat-stroked-button color="warn" (click)="onReceiptDelete(receipt.id)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+          <button mat-stroked-button color="primary" (click)="openDialog(receipt.id)">
+            <mat-icon>crop_free</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

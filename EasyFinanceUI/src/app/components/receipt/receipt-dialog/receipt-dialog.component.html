@@ -1,5 +1,5 @@
 <div class="bootstrap-wrapper">
-  <form [formGroup]="receiptForm">
+  <form [formGroup]="receiptForm" *ngIf="currentReceipt">
     <div class="row">
       <div class="col-md-12">
         <h2 class="float-left" mat-dialog-title>Новий чек</h2>
@@ -42,7 +42,7 @@
               <mat-form-field appearance="outline">
                 <mat-select formControlName="currency">
                   <mat-option>-- валюта --</mat-option>
-                  <mat-option *ngFor="let currency of currencySource" value="{{currency.id}}">{{currency.genericCode}}
+                  <mat-option *ngFor="let currency of currencySource" [value]="currency.id">{{currency.genericCode}}
                   </mat-option>
                 </mat-select>
                 <mat-label>Валюта</mat-label>
@@ -54,7 +54,7 @@
               <mat-form-field appearance="outline">
                 <mat-select formControlName="paymentMethod">
                   <mat-option>-- тип оплати --</mat-option>
-                  <mat-option *ngFor="let paymentMethod of paymentMethodSource" value="{{paymentMethod.id}}">
+                  <mat-option *ngFor="let paymentMethod of paymentMethodSource" [value]="paymentMethod.id">
                     {{paymentMethod.name}}
                   </mat-option>
                 </mat-select>
@@ -67,7 +67,7 @@
               <mat-form-field appearance="outline">
                 <mat-select formControlName="category">
                   <mat-option>-- категорія --</mat-option>
-                  <mat-option *ngFor="let category of categorySource" value="{{category.id}}">{{category.name}}
+                  <mat-option *ngFor="let category of categorySource" [value]="category.id">{{category.name}}
                   </mat-option>
                 </mat-select>
                 <mat-label>Категорія</mat-label>
@@ -77,7 +77,7 @@
           <div class="row">
             <div class="col-md-12">
               <mat-form-field appearance="outline">
-                <mat-label>Коментар</mat-label>
+                <mat-label>Коментар (необов'язково)</mat-label>
                 <input matInput placeholder="коментар" formControlName="description">
               </mat-form-field>
             </div>
@@ -85,7 +85,9 @@
         </div>
         <div class="col-md-5">
           <mat-card>
-            <img mat-card-image [src]="imageURL" *ngIf="imageURL">
+            <div class="image-wrapper">
+              <img mat-card-image [src]="imageURL" *ngIf="imageURL">
+            </div>
             <mat-card-actions>
               <button mat-stroked-button color="primary" style="width:50%;" (click)="onFileUpload()">
                 <mat-icon>add_photo_alternate</mat-icon>

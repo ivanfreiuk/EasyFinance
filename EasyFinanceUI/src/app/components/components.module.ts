@@ -46,6 +46,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     NavbarComponent,
     ReceiptDialogComponent,
+    ReceiptListComponent,
     ReceiptMainComponent,
     MatToolbarModule,
     MatIconModule,

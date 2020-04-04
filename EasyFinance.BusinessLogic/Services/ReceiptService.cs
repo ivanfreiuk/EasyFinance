@@ -30,6 +30,7 @@ namespace EasyFinance.BusinessLogic.Services
         public async Task<IEnumerable<Receipt>> GetReceiptsAsync()
         {
             return await _context.Receipts
+                .Include(r=>r.ReceiptPhoto)
                 .Include(r=>r.PaymentMethod)
                 .Include(r => r.Category)
                 .Include(r => r.Currency)

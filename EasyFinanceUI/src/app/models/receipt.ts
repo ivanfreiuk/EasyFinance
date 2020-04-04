@@ -1,11 +1,13 @@
 import { Category } from './category';
 import { PaymentMethod } from './payment-method';
 import { Currency } from './currency';
+import { ReceiptPhoto } from './receipt-photo';
 
 export class Receipt {
     public id: number;
     public merchant: string;
     public receiptPhotoId: number;
+    public receiptPhoto: ReceiptPhoto;
     public categoryId: number;
     public category: Category;
     public paymentMethodId: number;
