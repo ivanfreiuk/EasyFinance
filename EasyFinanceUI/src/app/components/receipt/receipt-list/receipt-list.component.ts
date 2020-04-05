@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ReceiptService } from 'src/app/services/receipt.service';
 import { Receipt } from 'src/app/models';
 import { FileHelper } from 'src/app/helpers/file-helper';
@@ -8,6 +8,8 @@ import { ReceiptPhotoService } from 'src/app/services/receipt-photo.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReceiptDialogComponent } from '../receipt-dialog/receipt-dialog.component';
 import { FormMode } from 'src/app/constants/form-mode';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-receipt-list',
@@ -16,20 +18,35 @@ import { FormMode } from 'src/app/constants/form-mode';
 })
 export class ReceiptListComponent implements OnInit {
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  obs: Observable<any>;
+  dataSource: MatTableDataSource<ReceiptView>;
+  
   receiptSource: ReceiptView[];
   
 
   constructor(public dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef,
     private receiptSvc: ReceiptService,
     private photoSvc: ReceiptPhotoService,
     private fileHelper: FileHelper) { 
       
        this.receiptSvc.getAll().subscribe((data: ReceiptView[])=>{
          this.receiptSource=data;
+         this.dataSource = new MatTableDataSource<ReceiptView>(this.receiptSource);
        });
   }
 
   ngOnInit() {
+    this.changeDetectorRef.detectChanges();     
+    //this.dataSource.paginator = this.paginator;
+    //this.obs = this.dataSource.connect();
+  }
+
+  ngOnDestroy() {
+    if (this.dataSource) { 
+      this.dataSource.disconnect(); 
+    }
   }
 
   onReceiptDelete(id: number) {
