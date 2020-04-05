@@ -9,7 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatRadioModule } from '@angular/material/radio';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { ReceiptMainComponent } from './receipt/receipt-main/receipt-main.component';
 import { ReceiptDialogComponent } from './receipt/receipt-dialog/receipt-dialog.component';
@@ -40,11 +42,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatSidenavModule,
+    MatRadioModule
   ],
   exports: [
     HttpClientModule,
     NavbarComponent,
+    SidenavComponent,
     ReceiptDialogComponent,
     ReceiptListComponent,
     ReceiptMainComponent,
@@ -57,7 +62,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatDatepickerModule,
     MatSelectModule,
-    MatCardModule
+    MatCardModule,
+    MatSidenavModule,
+    MatRadioModule
   ],
   entryComponents: [
     ReceiptDialogComponent
