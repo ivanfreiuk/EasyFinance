@@ -11,8 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import { MatRadioModule } from '@angular/material/radio';
+import {MatPaginatorModule, MatPaginatorIntl} from '@angular/material/paginator';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { ReceiptMainComponent } from './receipt/receipt-main/receipt-main.component';
 import { ReceiptDialogComponent } from './receipt/receipt-dialog/receipt-dialog.component';
@@ -71,7 +70,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ReceiptDialogComponent
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
+    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' }
   ]
 })
 export class ComponentsModule { }

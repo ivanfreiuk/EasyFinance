@@ -19,69 +19,54 @@ import { Observable } from 'rxjs';
 export class ReceiptListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  obs: Observable<any>;
-  dataSource: MatTableDataSource<ReceiptView>;
-  
-  receiptSource: ReceiptView[];
-  
+  observableData: Observable<ReceiptView[]>;
+  dataSource: MatTableDataSource<ReceiptView> = new MatTableDataSource<ReceiptView>();
+
 
   constructor(public dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
     private receiptSvc: ReceiptService,
     private photoSvc: ReceiptPhotoService,
-    private fileHelper: FileHelper) { 
-      
-       this.receiptSvc.getAll().subscribe((data: ReceiptView[])=>{
-         this.receiptSource=data;
-         this.dataSource = new MatTableDataSource<ReceiptView>(this.receiptSource);
-       });
+    private fileHelper: FileHelper) {
+
   }
 
   ngOnInit() {
-    this.changeDetectorRef.detectChanges();     
-    //this.dataSource.paginator = this.paginator;
-    //this.obs = this.dataSource.connect();
+    this.receiptSvc.getAll().subscribe((data: ReceiptView[]) => {
+      this.dataSource = new MatTableDataSource<ReceiptView>(data);
+      this.changeDetectorRef.detectChanges();
+      this.dataSource.paginator = this.paginator;
+      this.observableData = this.dataSource.connect();
+    });
   }
 
   ngOnDestroy() {
-    if (this.dataSource) { 
-      this.dataSource.disconnect(); 
+    if (this.dataSource) {
+      this.dataSource.disconnect();
     }
   }
 
   onReceiptDelete(id: number) {
-    this.receiptSvc.delete(id).subscribe(data=>{
-      this.receiptSource = this.receiptSource.filter(r=> r.id !== id)
+    this.receiptSvc.delete(id).subscribe(data => {
+      this.dataSource.data = this.dataSource.data.filter(r => r.id !== id)
     });
   }
 
-  openDialog(id:number): void {
+  openDialog(id: number): void {
     const dialogRef = this.dialog.open(ReceiptDialogComponent, {
       maxHeight: '700px',
       maxWidth: '900px',
       height: '90%',
       width: '70%',
-      data: { receiptId: id, formMode: FormMode.Edit}
+      data: { receiptId: id, formMode: FormMode.Edit }
     });
-    console.log('refresh')
 
-    dialogRef.afterClosed().subscribe(t=>this.refreshReceiptSource())
-    this.refreshReceiptSource()
+    dialogRef.afterClosed().subscribe(t => this.refreshDataSource());
   }
 
-refreshReceiptSource() {
-  this.receiptSvc.getAll().subscribe((data: ReceiptView[])=>{
-    this.receiptSource=data;
-  });
-  console.log('refresh')
-}
-
-
-  public setImageURL(file: File | Blob, imageURL: any) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (_event) => {
-        imageURL = reader.result;     
-    };
-}
+  refreshDataSource() {
+    this.receiptSvc.getAll().subscribe((data: ReceiptView[]) => {
+      this.dataSource.data = data;
+    });
+  }
 }

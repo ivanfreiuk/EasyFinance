@@ -1,7 +1,7 @@
 <div class="bootstrap-wrapper">
   <div class="centered">
     <div class="cards">
-      <mat-card class="card" *ngFor="let receipt of receiptSource">
+      <mat-card class="card" *ngFor="let receipt of observableData | async">
         <div class="image-wrapper">
           <img mat-card-image [src]="receipt.imageURL" *ngIf="receipt.imageURL">
         </div>
@@ -22,7 +22,7 @@
         </mat-card-actions>
       </mat-card>
     </div>
-    <mat-paginator [pageSizeOptions]="[2, 4, 12]"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[12, 20, 32]"></mat-paginator>
   </div>  
 </div>
 

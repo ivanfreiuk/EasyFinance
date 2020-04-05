@@ -78,12 +78,14 @@ export class ReceiptDialogComponent implements OnInit {
 
   onSave() {
     if (this.receiptForm.valid && !!this.imageFile) {
-      
+
       this.populateReceiptData();
       this.photoSvc.post(this.imageFile).subscribe((id: number) => {
         this.currentReceipt.receiptPhotoId = id;
-        this.receiptSvc.post(this.currentReceipt).subscribe((id: number) => { console.log('CERATED' + id) })
+        this.receiptSvc.post(this.currentReceipt).subscribe((id: number) => { console.log('CERATED -> ' + id) })
       });
+      
+      this.dialogRef.close();
     } else {
       console.log("FORM INVALID")
     }
@@ -114,7 +116,6 @@ export class ReceiptDialogComponent implements OnInit {
   }
 
   createFormGroup(receipt: Receipt) {
-    console.log(receipt);
     return this.formBuilder.group({
       merchant: [receipt.merchant],
       purchaseDate: [receipt.purchaseDate],
