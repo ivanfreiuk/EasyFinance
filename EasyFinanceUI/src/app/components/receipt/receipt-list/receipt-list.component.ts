@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ReceiptService } from 'src/app/services/receipt.service';
-import { Receipt } from 'src/app/models';
 import { FileHelper } from 'src/app/helpers/file-helper';
 import { ReceiptView } from 'src/app/models/receipt-view';
-import { map } from 'rxjs/operators';
+import { formatDate } from "@angular/common";
 import { ReceiptPhotoService } from 'src/app/services/receipt-photo.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReceiptDialogComponent } from '../receipt-dialog/receipt-dialog.component';
@@ -20,7 +19,7 @@ export class ReceiptListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   observableData: Observable<ReceiptView[]>;
-  dataSource: MatTableDataSource<ReceiptView> = new MatTableDataSource<ReceiptView>();
+  public dataSource: MatTableDataSource<ReceiptView> = new MatTableDataSource<ReceiptView>();
 
 
   constructor(public dialog: MatDialog,
@@ -61,10 +60,10 @@ export class ReceiptListComponent implements OnInit {
       data: { receiptId: id, formMode: FormMode.Edit }
     });
 
-    dialogRef.afterClosed().subscribe(t => this.refreshDataSource());
+    dialogRef.afterClosed().subscribe(i => this.refreshDataSource());
   }
 
-  refreshDataSource() {
+  public refreshDataSource() {
     this.receiptSvc.getAll().subscribe((data: ReceiptView[]) => {
       this.dataSource.data = data;
     });

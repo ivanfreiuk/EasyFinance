@@ -5,7 +5,7 @@ export class ReceiptView {
     public categoryName: string;
     public paymentMethodName: string;
     public totalAmount: number;
-    public currencyName: string;
+    public currencyGenericCode: string;
     public purchaseDate: Date;
     public description: string;
 
@@ -17,7 +17,7 @@ export class ReceiptView {
         this.categoryName = '';
         this.paymentMethodName = '';
         this.totalAmount = 0.00;
-        this.currencyName = '';
+        this.currencyGenericCode = '';
         this.purchaseDate = new Date();
         this.description = ''
     }

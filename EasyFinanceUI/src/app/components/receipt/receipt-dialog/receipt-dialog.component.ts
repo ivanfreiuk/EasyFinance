@@ -14,6 +14,7 @@ import { ReceiptPhoto } from 'src/app/models/receipt-photo';
 import { ReceiptDialogData } from 'src/app/helper-models/receipt-dialog-data';
 import { FormMode } from 'src/app/constants/form-mode';
 import { FileHelper } from 'src/app/helpers/file-helper';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-receipt-dialog',
@@ -25,12 +26,13 @@ export class ReceiptDialogComponent implements OnInit {
   private categorySource: Array<Category>;
   private currencySource: Array<Currency>;
   private paymentMethodSource: Array<PaymentMethod>;
-
   private currentReceipt: Receipt;
   private imageFile: File;
   private imageURL: any = 'assets/images/photo_upload.svg';
 
   receiptForm: FormGroup;
+  formMode: FormMode;
+  dialogTitle: string;
 
   constructor(private receiptSvc: ReceiptService,
     private categorySvc: CategoryService,
@@ -39,9 +41,11 @@ export class ReceiptDialogComponent implements OnInit {
     private photoSvc: ReceiptPhotoService,
     private fileHelper: FileHelper,
     private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<ReceiptDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private dialogData: ReceiptDialogData) {
 
+    this.formMode = dialogData.formMode;
     this.categorySvc.getAll().subscribe(data => {
       this.categorySource = data;
     });
@@ -52,10 +56,12 @@ export class ReceiptDialogComponent implements OnInit {
       this.paymentMethodSource = data;
     });
 
-    if (dialogData.formMode === FormMode.New) {
+    if (this.formMode === FormMode.New) {
+      this.dialogTitle = "Новий чек"
       this.currentReceipt = new Receipt();
       this.receiptForm = this.createFormGroup(this.currentReceipt);
     } else {
+      this.dialogTitle = `Редагувати чек# ${dialogData.receiptId}`;
       this.receiptSvc.getById(dialogData.receiptId).subscribe((receipt: Receipt) => {
         this.currentReceipt = receipt;
         this.receiptForm = this.createFormGroup(this.currentReceipt);
@@ -77,21 +83,39 @@ export class ReceiptDialogComponent implements OnInit {
   }
 
   onSave() {
-    if (this.receiptForm.valid && !!this.imageFile) {
-
+    if (this.receiptForm.valid && (!!this.imageFile || !!this.imageURL)) {
       this.populateReceiptData();
-      this.photoSvc.post(this.imageFile).subscribe((id: number) => {
-        this.currentReceipt.receiptPhotoId = id;
-        this.receiptSvc.post(this.currentReceipt).subscribe((id: number) => { console.log('CERATED -> ' + id) })
-      });
-      
-      this.dialogRef.close();
-    } else {
-      console.log("FORM INVALID")
-    }
 
+      switch (this.formMode) {
+        case FormMode.New: {
+          this.photoSvc.post(this.imageFile).subscribe((id: number) => {
+            this.currentReceipt.receiptPhotoId = id;
+            this.receiptSvc.post(this.currentReceipt).subscribe((id: number) => {
+              this.showNotification(`Успішно додано чек# ${id}`, 'Закрити')
+            });
+            this.dialogRef.close();
+          });
+          break;
+        }
+        case FormMode.Edit: {
+          this.receiptSvc.update(this.currentReceipt).subscribe(() => {
+            this.showNotification(`Чек# ${this.currentReceipt.id} успішно редаговано.`, 'Закрити')
+          });
+          break;
+        }
+      }
+    } else {
+      this.showNotification('Помилка! Некоректно введені дані.', 'Закрити')
+    }
   }
-  onRunAutoScanning() {
+  
+  onStartAutoScan() {
+    // TODO implement logic ( черга )
+    this.showNotification('Чек відправлено на сканування.', 'Закрити');
+    this.dialogRef.close()
+  }
+
+  onGetAutoScanned() {
     this.photoSvc.post(this.imageFile).subscribe((id: number) => {
       this.receiptSvc.autoScan(id).subscribe((data: Receipt) => {
         this.currentReceipt = data;
@@ -99,9 +123,10 @@ export class ReceiptDialogComponent implements OnInit {
         console.log(data);
       });
     });
+  }
 
-
-    //this.dialogRef.close()
+  isNewMode(): boolean {
+    return this.formMode === FormMode.New;
   }
 
   populateReceiptData() {
@@ -134,5 +159,11 @@ export class ReceiptDialogComponent implements OnInit {
     reader.onload = (_event) => {
       this.imageURL = reader.result;
     };
+  }
+
+  showNotification(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 }

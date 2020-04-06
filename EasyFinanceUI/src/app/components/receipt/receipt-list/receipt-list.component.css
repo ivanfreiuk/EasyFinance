@@ -28,7 +28,7 @@
 
 @media screen and (min-width: 52em) {
     .centered {
-        max-width: 67em;
+        max-width: 90em;
     }
 }
 
@@ -45,50 +45,6 @@ mat-card img {
     margin: 0 auto;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-/* mat-card {
-    margin: 5% auto;
-    width: 300px;
-    height: auto;
+mat-chip {
+    width: fit-content;
 }
-
-mat-card .image-wrapper {
-    height: 400px;
-    max-width: 100%;
-    margin: auto;
-    margin-bottom: 20px;
-} 
-
-mat-card img {
-    height: auto;
-    max-height: 400px;
-    max-width: 100%;
-    margin: auto;
-} */
-
-
-
-
-
-
-
-/* OLD */
-/* mat-card-content {
-    margin: 2% auto;
-}
-
-mat-card img {
-    max-height: 400px;
-    max-width: 100%;
-    margin: auto;
-} */

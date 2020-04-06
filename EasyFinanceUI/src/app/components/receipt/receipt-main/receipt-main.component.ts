@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ReceiptDialogComponent } from '../receipt-dialog/receipt-dialog.component';
 import { FormMode } from 'src/app/constants/form-mode';
+import { ReceiptListComponent } from '../receipt-list/receipt-list.component';
 
 @Component({
   selector: 'app-receipt-main',
@@ -9,6 +10,8 @@ import { FormMode } from 'src/app/constants/form-mode';
   styleUrls: ['./receipt-main.component.css']
 })
 export class ReceiptMainComponent implements OnInit {
+
+  @ViewChild(ReceiptListComponent) receiptListComponent: ReceiptListComponent;
 
   constructor(public dialog: MatDialog) { }
 
@@ -23,5 +26,7 @@ export class ReceiptMainComponent implements OnInit {
       width: '70%',
       data: { receiptId: null, formMode: FormMode.New}
     });
+
+    dialogRef.afterClosed().subscribe((i) => {this.receiptListComponent.refreshDataSource(); console.log("receiptListComponent")});
   }
 }

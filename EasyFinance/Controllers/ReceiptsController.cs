@@ -122,7 +122,16 @@ namespace EasyFinance.Controllers
                 return BadRequest();
             }
 
-            await _receiptService.UpdateReceiptAsync(receipt);
+            receiptFromDb.Merchant = receipt.Merchant;
+            receiptFromDb.ReceiptPhotoId = receipt.ReceiptPhotoId;
+            receiptFromDb.CategoryId = receipt.CategoryId;
+            receiptFromDb.CurrencyId = receipt.CurrencyId;
+            receiptFromDb.PaymentMethodId = receipt.PaymentMethodId;
+            receiptFromDb.TotalAmount = receipt.TotalAmount;
+            receiptFromDb.PurchaseDate = receipt.PurchaseDate;
+            receiptFromDb.Description = receipt.Description;
+
+            await _receiptService.UpdateReceiptAsync(receiptFromDb);
 
             return Ok();
         }

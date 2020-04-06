@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,7 +11,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {MatPaginatorModule, MatPaginatorIntl} from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
+import {MatListModule} from '@angular/material/list';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { ReceiptMainComponent } from './receipt/receipt-main/receipt-main.component';
 import { ReceiptDialogComponent } from './receipt/receipt-dialog/receipt-dialog.component';
@@ -20,6 +23,7 @@ import { SidenavComponent } from './common/sidenav/sidenav.component';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -44,7 +48,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSelectModule,
     MatCardModule,
     MatSidenavModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatChipsModule,
+    MatListModule
   ],
   exports: [
     HttpClientModule,
@@ -64,13 +71,16 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSelectModule,
     MatCardModule,
     MatSidenavModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSnackBarModule,
+    MatChipsModule,
+    MatListModule
   ],
   entryComponents: [
     ReceiptDialogComponent
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' }
+    { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' }  
   ]
 })
 export class ComponentsModule { }

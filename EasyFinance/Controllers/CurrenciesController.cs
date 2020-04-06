@@ -60,6 +60,9 @@ namespace EasyFinance.Controllers
                 return BadRequest();
             }
 
+            currencyFromDb.Name = currency.Name;
+            currencyFromDb.GenericCode = currency.GenericCode;
+
             await _currencyService.UpdateCurrencyAsync(currencyFromDb);
 
             return Ok();

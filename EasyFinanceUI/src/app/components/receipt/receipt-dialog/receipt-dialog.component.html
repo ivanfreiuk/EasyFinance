@@ -1,8 +1,8 @@
 <div class="bootstrap-wrapper">
   <form [formGroup]="receiptForm" *ngIf="currentReceipt">
     <div class="row">
-      <div class="col-md-12">
-        <h2 class="float-left" mat-dialog-title>Новий чек</h2>
+      <div class="col-12">
+        <h2 class="float-left" mat-dialog-title>{{dialogTitle}}</h2>
         <button mat-icon-button mat-dialog-close color="warn" class="float-right">
           <mat-icon>close</mat-icon>
         </button>
@@ -102,7 +102,9 @@
       </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-raised-button color="primary" (click)="onRunAutoScanning()">Сканувати <mat-icon>scanner</mat-icon>
+      <button mat-raised-button color="primary" (click)="onStartAutoScan()" *ngIf="isNewMode()">Відправити <mat-icon>publish</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" (click)="onGetAutoScanned()"  *ngIf="isNewMode()">Сканувати <mat-icon>scanner</mat-icon>
       </button>
       <button mat-raised-button color="accent" (click)="onSave()">Зберегти <mat-icon>save</mat-icon></button>
     </mat-dialog-actions>

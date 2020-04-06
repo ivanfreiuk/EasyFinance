@@ -60,6 +60,8 @@ namespace EasyFinance.Controllers
                 return BadRequest();
             }
 
+            paymentMethodFromDb.Name = paymentMethod.Name;
+
             await _paymentService.UpdatePaymentMethodAsync(paymentMethodFromDb);
 
             return Ok();

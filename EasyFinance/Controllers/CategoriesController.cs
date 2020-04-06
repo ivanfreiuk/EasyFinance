@@ -60,7 +60,9 @@ namespace EasyFinance.Controllers
                 return BadRequest();
             }
 
-            await _categoryService.UpdateCategoryAsync(category);
+            categoryFromDb.Name = category.Name;
+
+            await _categoryService.UpdateCategoryAsync(categoryFromDb);
 
             return Ok();
         }

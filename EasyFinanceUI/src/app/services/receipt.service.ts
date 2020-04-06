@@ -25,10 +25,10 @@ export class ReceiptService {
           receiptView.imageURL = receipt.receiptPhotoId ? 
           this.fileHelper.getImageSafeURL(receipt.receiptPhoto.fileBytes, receipt.receiptPhoto.fileName) : null;
           receiptView.merchant = receipt.merchant;
-          receiptView.categoryName = receipt.categoryId ? receipt.category.name : null;
-          receiptView.paymentMethodName = receipt.paymentMethodId ? receipt.paymentMethod.name : null;
+          receiptView.categoryName = receipt.categoryId ? receipt.category.name : '(без категорії)';
+          receiptView.paymentMethodName = receipt.paymentMethodId ? receipt.paymentMethod.name : '(без способу оплати)';
           receiptView.totalAmount = receipt.totalAmount;
-          receiptView.currencyName = receipt.categoryId ? receipt.currency.name : null;
+          receiptView.currencyGenericCode = receipt.currencyId ? receipt.currency.genericCode : null;
           receiptView.purchaseDate = receipt.purchaseDate;
           receiptView.description = receipt.description;
 
