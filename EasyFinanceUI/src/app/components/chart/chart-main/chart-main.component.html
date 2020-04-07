@@ -1,10 +1,23 @@
-<!-- <mat-tab-group>
+<!-- <mat-tab-group >
   <mat-tab label="Витрати по категоріях">
     <div class="tab-content">
-      
+      <app-category-chart></app-category-chart>
     </div>
   </mat-tab>
-  <mat-tab label="Витрати за весь час"> Content 2 </mat-tab>
-</mat-tab-group> -->
-<!-- <app-category-chart></app-category-chart> -->
-<app-period-chart></app-period-chart>
+  <mat-tab label="Витрати за весь час">
+    <div class="tab-content">
+      <app-category-chart></app-category-chart>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<app-period-chart></app-period-chart> -->
+
+<nav mat-tab-nav-bar>
+  <a mat-tab-link [routerLink]="['categories']">
+    Витрати по категоріях
+  </a>
+  <a mat-tab-link [routerLink]="['periods']">
+    Витрати за весь час
+  </a>
+</nav>
+<router-outlet></router-outlet>
