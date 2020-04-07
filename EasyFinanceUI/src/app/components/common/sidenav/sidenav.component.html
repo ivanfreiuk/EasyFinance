@@ -1,3 +1,13 @@
-<p>
-  sidenav works!
-</p>
+<mat-nav-list>
+  <mat-divider></mat-divider>
+  <a mat-list-item [routerLink]="['/receipts']">
+    <mat-icon mat-list-icon color="primary">receipt</mat-icon>
+    <div mat-line>Чеки</div>
+  </a>
+  <mat-divider></mat-divider>
+  <a mat-list-item [routerLink]="['statistic']">
+    <mat-icon mat-list-icon color="primary">bar_chart</mat-icon>
+    <div mat-line>Статистика</div>
+  </a>
+  <mat-divider></mat-divider>
+</mat-nav-list>

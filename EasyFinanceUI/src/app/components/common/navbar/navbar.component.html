@@ -1,21 +1,6 @@
-<div class="bootstrap-wrapper">
-    <div class="container-fluent">
-        <mat-toolbar color="primary">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-4">
-                        <button mat-icon-button (click)="onMenuButtonClick()">
-                            <mat-icon>menu</mat-icon>
-                        </button>
-                    </div>
-                    <div class="col-md-8">
-                        {{title}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-
-            </div>
-        </mat-toolbar>
-    </div>
-</div>
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="onMenuButtonClick()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    {{title}}
+</mat-toolbar>

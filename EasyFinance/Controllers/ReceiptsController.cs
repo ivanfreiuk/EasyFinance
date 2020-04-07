@@ -70,6 +70,32 @@ namespace EasyFinance.Controllers
             return Ok(receipts);
         }
 
+        [HttpGet("expensesbycategories")]
+        public async Task<IActionResult> GetExpensesByCategories()
+        {
+            var expensesByCategories = await _receiptService.GetExpensesByCategoriesAsync();
+
+            if (expensesByCategories == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(expensesByCategories);
+        }
+
+        [HttpGet("allperiodexpenses")]
+        public async Task<IActionResult> GetExpensesByAllPeriod()
+        {
+            var expensesByAllPeriod = await _receiptService.GetExpensesByAllPeriodAsync();
+
+            if (expensesByAllPeriod == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(expensesByAllPeriod);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateReceipt(Receipt receipt)
         {

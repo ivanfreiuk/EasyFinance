@@ -10,6 +10,10 @@ namespace EasyFinance.BusinessLogic.Interfaces
 
         Task<IEnumerable<Receipt>> GetReceiptsAsync();
 
+        Task<IEnumerable<object>> GetExpensesByCategoriesAsync();
+
+        Task<IEnumerable<object>> GetExpensesByAllPeriodAsync();
+
         Task AddReceiptAsync(Receipt receipt);
 
         Task UpdateReceiptAsync(Receipt receipt);

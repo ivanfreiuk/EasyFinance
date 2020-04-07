@@ -1,9 +1,13 @@
-.example-container {
+.container {
     position: absolute;
-    top: 0;
+    top: 66px;
     bottom: 0;
     left: 0;
     right: 0;
   }
+  mat-sidenav {
+    width: 300px;
+  }
+
     
   

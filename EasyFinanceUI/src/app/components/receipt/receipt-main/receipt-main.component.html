@@ -1,5 +1,12 @@
-<p>
-  RECEIPT - MAIN COMPONENT
-</p>
-<button mat-raised-button color="primary" (click)="openDialog()">Додати чек</button>
-<app-receipt-list></app-receipt-list>
+<div class="bootstrap-wrapper">
+  <div class="main-header row">
+    <div class="col-10">
+      <h2>Чеки</h2>
+    </div>
+    <div class="col-2">
+      <button mat-raised-button color="accent" (click)="openDialog()">Додати чек</button>
+    </div>
+  </div>
+  <app-receipt-filter></app-receipt-filter>
+  <app-receipt-list></app-receipt-list>
+</div>

@@ -5,6 +5,7 @@ import { Receipt } from '../models/receipt';
 import { FileHelper } from 'src/app/helpers/file-helper';
 import { ReceiptView } from 'src/app/models/receipt-view';
 import { map } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ReceiptService {
 
   private apiUrl: string = 'https://localhost:44398/api';
 
-  constructor(private http: HttpClient, private fileHelper: FileHelper) { }
+  constructor(private http: HttpClient, private fileHelper: FileHelper, private datePipe: DatePipe) { }
 
   getAll(): Observable<ReceiptView[]> {
     return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`).pipe<ReceiptView[]>(
@@ -22,8 +23,8 @@ export class ReceiptService {
         data.forEach((receipt: Receipt) => {
           let receiptView = new ReceiptView();
           receiptView.id = receipt.id;
-          receiptView.imageURL = receipt.receiptPhotoId ? 
-          this.fileHelper.getImageSafeURL(receipt.receiptPhoto.fileBytes, receipt.receiptPhoto.fileName) : null;
+          receiptView.imageURL = receipt.receiptPhotoId ?
+            this.fileHelper.getImageSafeURL(receipt.receiptPhoto.fileBytes, receipt.receiptPhoto.fileName) : null;
           receiptView.merchant = receipt.merchant;
           receiptView.categoryName = receipt.categoryId ? receipt.category.name : '(без категорії)';
           receiptView.paymentMethodName = receipt.paymentMethodId ? receipt.paymentMethod.name : '(без способу оплати)';
@@ -39,6 +40,34 @@ export class ReceiptService {
     )
   }
 
+  getExpensesByCategories() {
+    return this.http.get(`${this.apiUrl}/receipts/expensesbycategories`).pipe(map((data: any[]) => {
+      let items = new Array();
+      data.forEach(d => {
+        let item = {
+          value: d.total,
+          name: d.categoryName ? d.categoryName : '(без категорії)'
+        };
+        items.push(item);
+      });
+      return items;
+    }))
+  }
+
+  getExpensesByAllPeriod() {
+    return this.http.get(`${this.apiUrl}/receipts/allperiodexpenses`).pipe(map((data: any[]) => {
+      let items = new Array();
+      data.forEach(d => {
+        let item = {
+          value: d.total,
+          name: this.datePipe.transform(d.purchaseDate, 'dd-MM-yyyy')
+        };
+        items.push(item);
+      });
+      return items;
+    }))
+  }
+
   getById(id: number): Observable<Receipt> {
     return this.http.get<Receipt>(`${this.apiUrl}/receipts/${id}`);
   }
@@ -47,7 +76,7 @@ export class ReceiptService {
     return this.http.post(`${this.apiUrl}/receipts/create`, receipt);
   }
 
-  autoScan(photoId:number) {
+  autoScan(photoId: number) {
     return this.http.post(`${this.apiUrl}/receipts`, photoId);
   }
 

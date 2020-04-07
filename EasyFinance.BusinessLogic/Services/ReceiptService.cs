@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EasyFinance.BusinessLogic.Interfaces;
@@ -34,6 +35,42 @@ namespace EasyFinance.BusinessLogic.Services
                 .Include(r=>r.PaymentMethod)
                 .Include(r => r.Category)
                 .Include(r => r.Currency)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<object>> GetExpensesByCategoriesAsync()
+        {
+            return await _context.Receipts
+                .Include(r => r.Category)
+                .GroupBy(r => new
+                    {
+                        r.CategoryId,
+                        CategoryName = r.CategoryId != null ? r.Category.Name : null
+                    }
+                )
+                .Select(group => new
+                {
+                    group.Key.CategoryId,
+                    group.Key.CategoryName,
+                    Total = group.Sum(r => r.TotalAmount)
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<object>> GetExpensesByAllPeriodAsync()
+        {
+            return await _context.Receipts
+                .GroupBy(r => new
+                    {
+                        PurchaseDate = r.PurchaseDate.Value.Date
+                }
+                )
+                .Select(group => new
+                {
+                    group.Key.PurchaseDate,
+                    Total = group.Sum(r => r.TotalAmount)
+                })
+                .OrderBy(i=>i.PurchaseDate)
                 .ToListAsync();
         }
 
