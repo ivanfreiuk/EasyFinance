@@ -31,6 +31,8 @@ import { CategoryChartComponent } from './chart/category-chart/category-chart.co
 import { ChartMainComponent } from './chart/chart-main/chart-main.component';
 import { PeriodChartComponent } from './chart/period-chart/period-chart.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { LoginComponent } from './user/login/login.component';
+import { RegisterComponent } from './user/register/register.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { AppRoutingModule } from '../app-routing.module';
     ReceiptFilterComponent,
     CategoryChartComponent,
     ChartMainComponent,
-    PeriodChartComponent
+    PeriodChartComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     AppRoutingModule,
@@ -72,6 +76,8 @@ import { AppRoutingModule } from '../app-routing.module';
   exports: [
     HttpClientModule,
     NavbarComponent,
+    LoginComponent,
+    RegisterComponent,
     SidenavComponent,
     ReceiptDialogComponent,
     ReceiptListComponent,

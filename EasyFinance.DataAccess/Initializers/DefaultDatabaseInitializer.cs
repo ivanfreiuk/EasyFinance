@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using EasyFinance.DataAccess.Entities;
+using EasyFinance.DataAccess.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyFinance.DataAccess.Initializers
@@ -11,6 +12,7 @@ namespace EasyFinance.DataAccess.Initializers
             InitializeCategories(builder);
             InitializeCurrencies(builder);
             InitializePaymentMethods(builder);
+            InitializeRoles(builder);
         }
 
         public void InitializeCategories(ModelBuilder builder)
@@ -51,6 +53,17 @@ namespace EasyFinance.DataAccess.Initializers
                 {
                     new PaymentMethod {Id = 1, Name = "Готівка", MatchPattern = @"г[ao]тівк[а]"},
                     new PaymentMethod {Id = 2, Name = "Картка", MatchPattern = @"(к[ао]ртк[ао]|безг[ао]тівк[ао]в[ао])"}
+                });
+        }
+
+        public void InitializeRoles(ModelBuilder builder)
+        {
+            builder.Entity<Role>()
+                .HasData(new List<Role>
+                {
+                    new Role {Id = 1, Name = "Admin", NormalizedName = "ADMIN"},
+                    new Role {Id = 2, Name = "User", NormalizedName = "USER"},
+                    new Role {Id = 3, Name = "Manager", NormalizedName = "MANAGER"},
                 });
         }
     }

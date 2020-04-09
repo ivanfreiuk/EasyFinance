@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ReceiptService } from 'src/app/services/receipt.service';
+import { ReceiptService } from 'src/app/services/core/receipt.service';
 import { FileHelper } from 'src/app/helpers/file-helper';
 import { ReceiptView } from 'src/app/models/receipt-view';
 import { formatDate } from "@angular/common";
-import { ReceiptPhotoService } from 'src/app/services/receipt-photo.service';
+import { ReceiptPhotoService } from 'src/app/services/core/receipt-photo.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ReceiptDialogComponent } from '../receipt-dialog/receipt-dialog.component';
 import { FormMode } from 'src/app/constants/form-mode';

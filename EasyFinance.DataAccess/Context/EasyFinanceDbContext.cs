@@ -1,10 +1,12 @@
 ﻿using EasyFinance.DataAccess.Entities;
+using EasyFinance.DataAccess.Identity;
 using EasyFinance.DataAccess.Initializers;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyFinance.DataAccess.Context
 {
-    public class EasyFinanceDbContext: DbContext
+    public class EasyFinanceDbContext: IdentityDbContext<User, Role, int>
     {
         public virtual DbSet<Receipt> Receipts { get; set; }
 
@@ -25,6 +27,8 @@ namespace EasyFinance.DataAccess.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             new DefaultDatabaseInitializer().Initialize(modelBuilder);
+            
+            base.OnModelCreating(modelBuilder);
         }
 
 

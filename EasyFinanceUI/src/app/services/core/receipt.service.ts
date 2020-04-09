@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Receipt } from '../models/receipt';
+import { Receipt } from '../../models/receipt';
 import { FileHelper } from 'src/app/helpers/file-helper';
 import { ReceiptView } from 'src/app/models/receipt-view';
 import { map } from 'rxjs/operators';

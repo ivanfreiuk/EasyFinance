@@ -4,8 +4,18 @@ import { ReceiptMainComponent } from './components/receipt/receipt-main/receipt-
 import { ChartMainComponent } from './components/chart/chart-main/chart-main.component';
 import { CategoryChartComponent } from './components/chart/category-chart/category-chart.component';
 import { PeriodChartComponent } from './components/chart/period-chart/period-chart.component';
+import { LoginComponent } from './components/user/login/login.component';
+import { RegisterComponent } from './components/user/register/register.component';
 
 const routes: Routes = [
+  {
+    path: 'register',
+    component: RegisterComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: 'receipts',
     component: ReceiptMainComponent

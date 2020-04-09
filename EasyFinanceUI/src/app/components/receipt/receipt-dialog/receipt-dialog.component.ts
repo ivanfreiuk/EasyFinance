@@ -1,15 +1,15 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { ReceiptService } from 'src/app/services/receipt.service';
-import { CategoryService } from 'src/app/services/category.service';
-import { CurrencyService } from 'src/app/services/currency.service';
-import { PaymentMethodService } from 'src/app/services/payment-method.service';
+import { ReceiptService } from 'src/app/services/core/receipt.service';
+import { CategoryService } from 'src/app/services/core/category.service';
+import { CurrencyService } from 'src/app/services/core/currency.service';
+import { PaymentMethodService } from 'src/app/services/core/payment-method.service';
 import { Currency } from 'src/app/models/currency';
 import { Category } from 'src/app/models/category';
 import { PaymentMethod } from 'src/app/models/payment-method';
 import { Receipt } from 'src/app/models/receipt';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ReceiptPhotoService } from 'src/app/services/receipt-photo.service';
+import { ReceiptPhotoService } from 'src/app/services/core/receipt-photo.service';
 import { ReceiptPhoto } from 'src/app/models/receipt-photo';
 import { ReceiptDialogData } from 'src/app/helper-models/receipt-dialog-data';
 import { FormMode } from 'src/app/constants/form-mode';
@@ -83,32 +83,33 @@ export class ReceiptDialogComponent implements OnInit {
   }
 
   onSave() {
-    if (this.receiptForm.valid && (!!this.imageFile || !!this.imageURL)) {
-      this.populateReceiptData();
-
-      switch (this.formMode) {
-        case FormMode.New: {
-          this.photoSvc.post(this.imageFile).subscribe((id: number) => {
-            this.currentReceipt.receiptPhotoId = id;
-            this.receiptSvc.post(this.currentReceipt).subscribe((id: number) => {
-              this.showNotification(`Успішно додано чек# ${id}`, 'Закрити')
-            });
-            this.dialogRef.close();
-          });
-          break;
-        }
-        case FormMode.Edit: {
-          this.receiptSvc.update(this.currentReceipt).subscribe(() => {
-            this.showNotification(`Чек# ${this.currentReceipt.id} успішно редаговано.`, 'Закрити')
-          });
-          break;
-        }
-      }
-    } else {
+    if (this.receiptForm.invalid && (!this.imageFile || !this.imageURL)) {
       this.showNotification('Помилка! Некоректно введені дані.', 'Закрити')
+      return;
+    }
+
+    this.populateReceiptData();
+
+    switch (this.formMode) {
+      case FormMode.New: {
+        this.photoSvc.post(this.imageFile).subscribe((id: number) => {
+          this.currentReceipt.receiptPhotoId = id;
+          this.receiptSvc.post(this.currentReceipt).subscribe((id: number) => {
+            this.showNotification(`Успішно додано чек# ${id}`, 'Закрити')
+          });
+          this.dialogRef.close();
+        });
+        break;
+      }
+      case FormMode.Edit: {
+        this.receiptSvc.update(this.currentReceipt).subscribe(() => {
+          this.showNotification(`Чек# ${this.currentReceipt.id} успішно редаговано.`, 'Закрити')
+        });
+        break;
+      }
     }
   }
-  
+
   onStartAutoScan() {
     // TODO implement logic ( черга )
     this.showNotification('Чек відправлено на сканування.', 'Закрити');
