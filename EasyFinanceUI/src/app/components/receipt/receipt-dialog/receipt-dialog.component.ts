@@ -15,6 +15,7 @@ import { ReceiptDialogData } from 'src/app/helper-models/receipt-dialog-data';
 import { FormMode } from 'src/app/constants/form-mode';
 import { FileHelper } from 'src/app/helpers/file-helper';
 import { MatSnackBar } from '@angular/material';
+import { AuthenticationService } from 'src/app/services/user/authentication.service';
 
 @Component({
   selector: 'app-receipt-dialog',
@@ -35,6 +36,7 @@ export class ReceiptDialogComponent implements OnInit {
   dialogTitle: string;
 
   constructor(private receiptSvc: ReceiptService,
+    private authSvc: AuthenticationService,
     private categorySvc: CategoryService,
     private currencySvc: CurrencyService,
     private paymentMethodSvc: PaymentMethodService,
@@ -103,7 +105,7 @@ export class ReceiptDialogComponent implements OnInit {
       }
       case FormMode.Edit: {
         this.receiptSvc.update(this.currentReceipt).subscribe(() => {
-          this.showNotification(`Чек# ${this.currentReceipt.id} успішно редаговано.`, 'Закрити')
+          this.showNotification(`Чек# ${this.currentReceipt.id} успішно збережено.`, 'Закрити')
         });
         break;
       }
@@ -121,8 +123,12 @@ export class ReceiptDialogComponent implements OnInit {
       this.receiptSvc.autoScan(id).subscribe((data: Receipt) => {
         this.currentReceipt = data;
         this.receiptForm = this.createFormGroup(this.currentReceipt);
-        console.log(data);
-      });
+        this.formMode = FormMode.Edit;
+        this.showNotification(`Чек# ${data.id} успішно відскановано.`, 'Закрити')
+      },
+        error => {
+          this.showNotification('Помилка! Невдалося відсканувати чек.', 'Закрити');
+        });
     });
   }
 
@@ -132,6 +138,7 @@ export class ReceiptDialogComponent implements OnInit {
 
   populateReceiptData() {
     const receiptValue = this.receiptForm.value;
+    this.currentReceipt.userId = this.authSvc.currentUserValue.id;
     this.currentReceipt.merchant = receiptValue.merchant;
     this.currentReceipt.purchaseDate = receiptValue.purchaseDate;
     this.currentReceipt.totalAmount = receiptValue.totalAmount;

@@ -54,7 +54,7 @@ namespace EasyFinance.BusinessLogic.Builders
             
             var totalValue = Regex.Replace(totalText ?? string.Empty, "[,;:]", ".").Replace(" ", "");
             
-            _receipt.TotalAmount = decimal.TryParse(totalValue, out var totalAmount) ? totalAmount : (decimal?) null;
+            _receipt.TotalAmount = decimal.TryParse(totalValue, out var totalAmount) ? totalAmount : 0;
 
             return this;
         }
@@ -66,7 +66,7 @@ namespace EasyFinance.BusinessLogic.Builders
             var cultureInfo = new CultureInfo("uk-UA");
             var isParsed = DateTime.TryParseExact(datetimeText, cultureInfo.DateTimeFormat.ShortDatePattern,  cultureInfo, DateTimeStyles.None, out var result);
 
-           _receipt.PurchaseDate = isParsed ? result :  (DateTime?) null;
+           _receipt.PurchaseDate = isParsed ? result :  DateTime.Now;
 
             return this;
         }

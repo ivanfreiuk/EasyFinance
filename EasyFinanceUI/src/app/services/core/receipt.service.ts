@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Receipt } from '../../models/receipt';
 import { FileHelper } from 'src/app/helpers/file-helper';
 import { ReceiptView } from 'src/app/models/receipt-view';
@@ -16,32 +16,36 @@ export class ReceiptService {
 
   constructor(private http: HttpClient, private fileHelper: FileHelper, private datePipe: DatePipe) { }
 
-  getAll(): Observable<ReceiptView[]> {
-    return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`).pipe<ReceiptView[]>(
-      map((data: Receipt[]) => {
-        let receipts = new Array<ReceiptView>();
-        data.forEach((receipt: Receipt) => {
-          let receiptView = new ReceiptView();
-          receiptView.id = receipt.id;
-          receiptView.imageURL = receipt.receiptPhotoId ?
-            this.fileHelper.getImageSafeURL(receipt.receiptPhoto.fileBytes, receipt.receiptPhoto.fileName) : null;
-          receiptView.merchant = receipt.merchant;
-          receiptView.categoryName = receipt.categoryId ? receipt.category.name : '(без категорії)';
-          receiptView.paymentMethodName = receipt.paymentMethodId ? receipt.paymentMethod.name : '(без способу оплати)';
-          receiptView.totalAmount = receipt.totalAmount;
-          receiptView.currencyGenericCode = receipt.currencyId ? receipt.currency.genericCode : null;
-          receiptView.purchaseDate = receipt.purchaseDate;
-          receiptView.description = receipt.description;
+  getAll(userId: number = null): Observable<ReceiptView[]> {
+    
+    const params = userId ? new HttpParams().set('userId', JSON.stringify(userId)) : null;
 
-          receipts.push(receiptView);
-        });
-        return receipts;
-      })
-    )
+    return this.http.get<Receipt[]>(`${this.apiUrl}/receipts`,{params:params})
+      .pipe<ReceiptView[]>(
+        map((data: Receipt[]) => {
+          let receipts = new Array<ReceiptView>();
+          data.forEach((receipt: Receipt) => {
+            let receiptView = new ReceiptView();
+            receiptView.id = receipt.id;
+            receiptView.imageURL = receipt.receiptPhotoId ?
+              this.fileHelper.getImageSafeURL(receipt.receiptPhoto.fileBytes, receipt.receiptPhoto.fileName) : null;
+            receiptView.merchant = receipt.merchant;
+            receiptView.categoryName = receipt.categoryId ? receipt.category.name : '(без категорії)';
+            receiptView.paymentMethodName = receipt.paymentMethodId ? receipt.paymentMethod.name : '(без способу оплати)';
+            receiptView.totalAmount = receipt.totalAmount;
+            receiptView.currencyGenericCode = receipt.currencyId ? receipt.currency.genericCode : null;
+            receiptView.purchaseDate = receipt.purchaseDate;
+            receiptView.description = receipt.description;
+
+            receipts.push(receiptView);
+          });
+          return receipts;
+        })
+      )
   }
 
-  getExpensesByCategories() {
-    return this.http.get(`${this.apiUrl}/receipts/expensesbycategories`).pipe(map((data: any[]) => {
+  getExpensesByCategories(userId: number) {
+    return this.http.get(`${this.apiUrl}/receipts/expensesbycategories/${userId}`).pipe(map((data: any[]) => {
       let items = new Array();
       data.forEach(d => {
         let item = {
@@ -54,8 +58,10 @@ export class ReceiptService {
     }))
   }
 
-  getExpensesByAllPeriod() {
-    return this.http.get(`${this.apiUrl}/receipts/allperiodexpenses`).pipe(map((data: any[]) => {
+  getExpensesForPeriod(userId: number) {
+    const params = userId ? new HttpParams().set('userId', JSON.stringify(userId)) : null;
+    return this.http.get(`${this.apiUrl}/receipts/allperiodexpenses`, {params:params})
+    .pipe(map((data: any[]) => {
       let items = new Array();
       data.forEach(d => {
         let item = {
@@ -77,7 +83,7 @@ export class ReceiptService {
   }
 
   autoScan(photoId: number) {
-    return this.http.post(`${this.apiUrl}/receipts`, photoId);
+    return this.http.post(`${this.apiUrl}/receipts/autoscan`, photoId);
   }
 
   update(receipt: Receipt) {

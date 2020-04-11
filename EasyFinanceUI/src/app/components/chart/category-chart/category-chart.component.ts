@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReceiptService } from 'src/app/services/core/receipt.service';
+import { AuthenticationService } from 'src/app/services/user/authentication.service';
 
 @Component({
   selector: 'app-category-chart',
@@ -18,8 +19,8 @@ export class CategoryChartComponent implements OnInit {
 
   dataSource: any[];
 
-  constructor(private receiptSvc: ReceiptService) {
-    this.receiptSvc.getExpensesByCategories().subscribe((data: any[]) => {
+  constructor(private authSvc: AuthenticationService, private receiptSvc: ReceiptService) {
+    this.receiptSvc.getExpensesByCategories(this.authSvc.currentUserValue.id).subscribe((data: any[]) => {
     this.dataSource = data
     });
 

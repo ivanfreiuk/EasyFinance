@@ -9,6 +9,7 @@ import { ReceiptDialogComponent } from '../receipt-dialog/receipt-dialog.compone
 import { FormMode } from 'src/app/constants/form-mode';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs';
+import { AuthenticationService } from 'src/app/services/user/authentication.service';
 
 @Component({
   selector: 'app-receipt-list',
@@ -25,13 +26,14 @@ export class ReceiptListComponent implements OnInit {
   constructor(public dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
     private receiptSvc: ReceiptService,
+    private authSvc: AuthenticationService,
     private photoSvc: ReceiptPhotoService,
     private fileHelper: FileHelper) {
 
   }
 
   ngOnInit() {
-    this.receiptSvc.getAll().subscribe((data: ReceiptView[]) => {
+    this.receiptSvc.getAll(this.authSvc.currentUserValue.id).subscribe((data: ReceiptView[]) => {
       this.dataSource = new MatTableDataSource<ReceiptView>(data);
       this.changeDetectorRef.detectChanges();
       this.dataSource.paginator = this.paginator;
@@ -64,7 +66,7 @@ export class ReceiptListComponent implements OnInit {
   }
 
   public refreshDataSource() {
-    this.receiptSvc.getAll().subscribe((data: ReceiptView[]) => {
+    this.receiptSvc.getAll(this.authSvc.currentUserValue.id).subscribe((data: ReceiptView[]) => {
       this.dataSource.data = data;
     });
   }

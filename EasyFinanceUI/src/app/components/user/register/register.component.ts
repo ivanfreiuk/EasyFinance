@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { first } from 'rxjs/operators';
 import { MustMatch } from 'src/app/helpers/must-match';
+import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -17,6 +18,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private userSvc: UserService,
     private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
     private router: Router) { }
 
   ngOnInit() {
@@ -25,7 +27,7 @@ export class RegisterComponent implements OnInit {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      confirmPassword: ['',[Validators.required]]
+      confirmPassword: ['', [Validators.required]]
     },
       { validator: MustMatch('password', 'confirmPassword') })
   }
@@ -50,17 +52,17 @@ export class RegisterComponent implements OnInit {
     this.userSvc.register(user)
       .pipe(first())
       .subscribe(() => {
-        this.router.navigate(['/receipts']);
+        this.showNotification('Ваш аккаунт успішно створено.', 'Закрити');
+        this.router.navigate(['/login'])
       },
-        error => {
-          console.log(error);
-        });
+      error => {
+        this.showNotification('Помилка! Не вдалося створити новий аккаунт.', 'Закрити')
+      });
   }
 
-  checkPasswords(group: FormGroup) { // here we have the 'passwords' group
-    let pass = group.controls.password.value;
-    let confirmPass = group.controls.confirmPassword.value;
-
-    return pass === confirmPass ? null : { notSame: true }
+  showNotification(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 }

@@ -6,6 +6,8 @@ import { CategoryChartComponent } from './components/chart/category-chart/catego
 import { PeriodChartComponent } from './components/chart/period-chart/period-chart.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
+import { DinamicChartComponent } from './components/chart/dinamic-chart/dinamic-chart.component';
+
 
 const routes: Routes = [
   {
@@ -27,6 +29,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'categories', pathMatch: 'full' },
       { path: 'categories', component: CategoryChartComponent },
       { path: 'periods', component: PeriodChartComponent },
+      { path: 'dinamics', component: DinamicChartComponent }
     ]
   },
   {

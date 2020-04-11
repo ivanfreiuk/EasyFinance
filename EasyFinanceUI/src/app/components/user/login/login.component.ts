@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/user/authentication.service';
 import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
   constructor(private authService: AuthenticationService,
+    private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
@@ -38,9 +40,15 @@ export class LoginComponent implements OnInit {
       .subscribe(() => {
         this.router.navigate(['/receipts']);
       },
-        error => {
-          console.log(error);
+      error => {
+        this.showNotification('Невдалося ввійти. Пароль або логін введено неправильно.', 'Закрити')
       });
+  }
+
+  showNotification(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 
 }

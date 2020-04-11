@@ -1,4 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material';
+import { AuthenticationService } from 'src/app/services/user/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,8 +12,12 @@ export class NavbarComponent implements OnInit {
   
   @Output() menuButtonClick = new EventEmitter();
 
+  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+  
   title: string = 'Easy Finance'
-  constructor() { }
+  
+  constructor(private authService: AuthenticationService,
+    private router: Router) { }
 
   ngOnInit() {
   }
@@ -19,5 +26,8 @@ export class NavbarComponent implements OnInit {
     this.menuButtonClick.emit();
   }
 
-
+  logout() {
+    this.authService.logout();
+    this.router.navigate(["/login"]);
+  }
 }

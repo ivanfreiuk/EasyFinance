@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using EasyFinance.BusinessLogic.Interfaces;
+using EasyFinance.BusinessLogic.Models;
 using EasyFinance.DataAccess.Context;
 using EasyFinance.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -28,9 +31,10 @@ namespace EasyFinance.BusinessLogic.Services
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<IEnumerable<Receipt>> GetReceiptsAsync()
+        public async Task<IEnumerable<Receipt>> GetReceiptsAsync(int? userId=null)
         {
             return await _context.Receipts
+                .Where(r=> !userId.HasValue || r.UserId==userId)
                 .Include(r=>r.ReceiptPhoto)
                 .Include(r=>r.PaymentMethod)
                 .Include(r => r.Category)
@@ -38,9 +42,21 @@ namespace EasyFinance.BusinessLogic.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<object>> GetExpensesByCategoriesAsync()
+        public async Task<IEnumerable<Receipt>> GetReceiptsByUserIdAsync(int userId)
         {
             return await _context.Receipts
+                .Where(r=>r.UserId == userId)
+                .Include(r => r.ReceiptPhoto)
+                .Include(r => r.PaymentMethod)
+                .Include(r => r.Category)
+                .Include(r => r.Currency)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<object>> GetExpensesByCategoriesAsync(int userId)
+        {
+            return await _context.Receipts
+                .Where(r => r.UserId == userId)
                 .Include(r => r.Category)
                 .GroupBy(r => new
                     {
@@ -57,21 +73,26 @@ namespace EasyFinance.BusinessLogic.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<object>> GetExpensesByAllPeriodAsync()
+        public async Task<IEnumerable<ExpensePeriod>> GetExpensesForPeriodAsync(int userId, bool includeEachDay=false)
         {
-            return await _context.Receipts
+            var expenses = await _context.Receipts
+                .Where(r => r.UserId == userId)
                 .GroupBy(r => new
                     {
+                        r.UserId,
                         PurchaseDate = r.PurchaseDate.Value.Date
-                }
+                    }
                 )
-                .Select(group => new
+                .Select(group => new ExpensePeriod
                 {
-                    group.Key.PurchaseDate,
-                    Total = group.Sum(r => r.TotalAmount)
+                    UserId = group.Key.UserId,
+                    PurchaseDate = group.Key.PurchaseDate,
+                    Total = group.Sum(r => r.TotalAmount).Value
                 })
-                .OrderBy(i=>i.PurchaseDate)
+                .OrderBy(i => i.PurchaseDate)
                 .ToListAsync();
+
+            return includeEachDay ? CreateWholePeriodExpenses(expenses) : expenses;
         }
 
         public async Task AddReceiptAsync(Receipt receipt)
@@ -93,6 +114,27 @@ namespace EasyFinance.BusinessLogic.Services
             await Task.Run(() => _context.Receipts.Remove(receipt));
 
             await _context.SaveChangesAsync();
+        }
+
+        private IEnumerable<ExpensePeriod> CreateWholePeriodExpenses(List<ExpensePeriod> expenses)
+        {
+            var allPeriodExpenses = new List<ExpensePeriod>();
+
+            if (!expenses.Any())
+            {
+                return allPeriodExpenses;
+            }
+
+            var firstDate = expenses.Min(e => e.PurchaseDate).Date;
+            var lastDate = expenses.Max(e=>e.PurchaseDate).Date;
+            for (var date = firstDate.Date;date<=lastDate.Date; date = date.AddDays(1))
+            {
+                var expense = expenses.FirstOrDefault(e => e.PurchaseDate.Date == date);
+
+                allPeriodExpenses.Add(expense ?? new ExpensePeriod{ PurchaseDate = date, Total = 0});
+            }
+            
+            return allPeriodExpenses;
         }
     }
 }

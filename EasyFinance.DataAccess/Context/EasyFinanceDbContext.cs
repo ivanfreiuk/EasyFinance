@@ -10,6 +10,8 @@ namespace EasyFinance.DataAccess.Context
     {
         public virtual DbSet<Receipt> Receipts { get; set; }
 
+        public virtual DbSet<Notification> Notifications { get; set; }
+
         public virtual DbSet<ReceiptPhoto> ReceiptPhotos { get; set; }
 
         public virtual DbSet<Category> Categories { get; set; }

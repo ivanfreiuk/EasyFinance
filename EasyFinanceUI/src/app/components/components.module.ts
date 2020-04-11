@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
+import {MatMenuModule} from '@angular/material/menu';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { ReceiptMainComponent } from './receipt/receipt-main/receipt-main.component';
@@ -33,6 +34,7 @@ import { PeriodChartComponent } from './chart/period-chart/period-chart.componen
 import { AppRoutingModule } from '../app-routing.module';
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
+import { DinamicChartComponent } from './chart/dinamic-chart/dinamic-chart.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import { RegisterComponent } from './user/register/register.component';
     ChartMainComponent,
     PeriodChartComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    DinamicChartComponent
   ],
   imports: [
     AppRoutingModule,
@@ -71,6 +74,7 @@ import { RegisterComponent } from './user/register/register.component';
     MatListModule,
     MatExpansionModule,
     MatTabsModule,
+    MatMenuModule,
     NgxChartsModule
   ],
   exports: [
@@ -82,7 +86,8 @@ import { RegisterComponent } from './user/register/register.component';
     ReceiptDialogComponent,
     ReceiptListComponent,
     ReceiptMainComponent,
-    PeriodChartComponent,
+    PeriodChartComponent,   
+    DinamicChartComponent, 
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
@@ -100,6 +105,7 @@ import { RegisterComponent } from './user/register/register.component';
     MatListModule,
     MatExpansionModule,
     MatTabsModule,
+    MatMenuModule,
     NgxChartsModule
   ],
   entryComponents: [

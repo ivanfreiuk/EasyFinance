@@ -50,8 +50,11 @@
           </mat-form-field>
         </form>
       </mat-card-content>
-      <mat-card-actions align='end'>
-        <button mat-flat-button color="primary" (click)="onSubmit()">Зареєструватися</button>
+      <mat-card-actions>        
+        <button mat-flat-button color="primary" (click)="onSubmit()">Зареєструватися</button>   
+        <div style="margin: 10px;">
+          <span>Перейти на сторінку для <a routerLink="/login">входу</a> </span> 
+        </div>    
       </mat-card-actions>
     </mat-card>
   </div>

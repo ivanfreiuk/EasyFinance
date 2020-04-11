@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using EasyFinance.Builders.Interfaces;
 using EasyFinance.BusinessLogic.Builders.Interfaces;
@@ -7,7 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using EasyFinance.BusinessLogic.Interfaces;
 using EasyFinance.Constans;
 using EasyFinance.DataAccess.Entities;
+using EasyFinance.DataAccess.Identity;
 using EasyFinance.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Microsoft.Extensions.Options;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
@@ -15,12 +20,14 @@ using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
 
 namespace EasyFinance.Controllers
 {
+    //[Authorize]
     [Route("api/receipts")]
     [ApiController]
     public class ReceiptsController : ControllerBase
     {
         private readonly CustomVisionSecrets _cvSecrets;
         private readonly IReceiptPhotoService _receiptPhotoSvc;
+        private readonly UserManager<User> _userManager;
         private readonly IReceiptHelper _receiptHelper;
         private readonly IReceiptObjectDirector _receiptDirector;
         private readonly IReceiptScanTextDirector _scanTextDirector;
@@ -28,6 +35,7 @@ namespace EasyFinance.Controllers
         private readonly IFileHelper _fileHelper;
 
         public ReceiptsController(IReceiptPhotoService receiptPhotoSvc,
+            UserManager<User> userManager,
             IReceiptHelper receiptHelper,
             IReceiptObjectDirector receiptDirector,
             IReceiptScanTextDirector scanTextDirector,
@@ -36,6 +44,7 @@ namespace EasyFinance.Controllers
             IOptions<CustomVisionSecrets> options)
         {
             _receiptPhotoSvc = receiptPhotoSvc;
+            _userManager = userManager;
             _receiptHelper = receiptHelper;
             _receiptDirector = receiptDirector;
             _scanTextDirector = scanTextDirector;
@@ -58,9 +67,9 @@ namespace EasyFinance.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetReceipts()
+        public async Task<IActionResult> GetReceipts([FromQuery] int? userId)
         {
-            var receipts = await _receiptService.GetReceiptsAsync();
+            var receipts = await _receiptService.GetReceiptsAsync(userId);
 
             if (receipts == null)
             {
@@ -69,11 +78,11 @@ namespace EasyFinance.Controllers
             
             return Ok(receipts);
         }
-
-        [HttpGet("expensesbycategories")]
-        public async Task<IActionResult> GetExpensesByCategories()
+        
+        [HttpGet("expensesbycategories/{userId}")]
+        public async Task<IActionResult> GetExpensesByCategories(int userId)
         {
-            var expensesByCategories = await _receiptService.GetExpensesByCategoriesAsync();
+            var expensesByCategories = await _receiptService.GetExpensesByCategoriesAsync(userId);
 
             if (expensesByCategories == null)
             {
@@ -83,10 +92,10 @@ namespace EasyFinance.Controllers
             return Ok(expensesByCategories);
         }
 
-        [HttpGet("allperiodexpenses")]
-        public async Task<IActionResult> GetExpensesByAllPeriod()
+        [HttpGet("allperiodexpenses/")]
+        public async Task<IActionResult> GetExpensesForPeriod([FromQuery] int userId, [FromQuery] bool includeEachDay)
         {
-            var expensesByAllPeriod = await _receiptService.GetExpensesByAllPeriodAsync();
+            var expensesByAllPeriod = await _receiptService.GetExpensesForPeriodAsync(userId, includeEachDay);
 
             if (expensesByAllPeriod == null)
             {
@@ -111,33 +120,43 @@ namespace EasyFinance.Controllers
             return Ok(receipt.Id);
         }
 
-        [HttpPost]
+        [HttpPost("autoscan")]
         public async Task<IActionResult> StartReceiptProcessing([FromBody]int id)
         {
-            var receiptPhoto = await _receiptPhotoSvc.GetReceiptPhotoAsync(id);
-
-            if (receiptPhoto == null)
+            try
             {
-                return BadRequest();
+                var receiptPhoto = await _receiptPhotoSvc.GetReceiptPhotoAsync(id);
+
+                if (receiptPhoto == null)
+                {
+                    return BadRequest();
+                }
+
+                var imagePrediction = await GetPredictionAsync(receiptPhoto.FileBytes);           
+                var receiptSections = _receiptHelper.ExtractSections(imagePrediction.Predictions);
+                var receiptTemplate = _receiptHelper.CreateReceiptTemplate(receiptSections);
+
+
+                var image = _fileHelper.ByteArrayToImage(receiptPhoto.FileBytes);
+                var scanText = _scanTextDirector.ConstructScanText(image, receiptTemplate);
+                var receipt = _receiptDirector.ConstructReceipt(scanText);
+
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                receipt.UserId = user.Id;
+                receipt.ReceiptPhotoId = id;
+            
+                await _receiptService.AddReceiptAsync(receipt);
+
+                var receiptModel = await _receiptService.GetReceiptAsync(receipt.Id);
+
+                return Ok(receiptModel);
             }
-
-            var imagePrediction = await GetPredictionAsync(receiptPhoto.FileBytes);           
-            var receiptSections = _receiptHelper.ExtractSections(imagePrediction.Predictions);
-            var receiptTemplate = _receiptHelper.CreateReceiptTemplate(receiptSections);
-
-
-            var image = _fileHelper.ByteArrayToImage(receiptPhoto.FileBytes);
-            var scanText = _scanTextDirector.ConstructScanText(image, receiptTemplate);
-            var receipt = _receiptDirector.ConstructReceipt(scanText);
-
-            receipt.ReceiptPhotoId = id;
-            await _receiptService.AddReceiptAsync(receipt);
-
-            var receiptModel = await _receiptService.GetReceiptAsync(receipt.Id);
-
-            return Ok(receiptModel);
+            catch (Exception e)
+            {
+                return StatusCode((int) HttpStatusCode.InternalServerError, e.Message);
+            }
         }
-
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> EditReceipt(int id, Receipt receipt)
         {

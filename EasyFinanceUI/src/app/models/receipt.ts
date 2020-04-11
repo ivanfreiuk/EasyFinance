@@ -5,6 +5,7 @@ import { ReceiptPhoto } from './receipt-photo';
 
 export class Receipt {
     public id: number;
+    public userId: number;
     public merchant: string;
     public receiptPhotoId: number;
     public receiptPhoto: ReceiptPhoto;
@@ -21,6 +22,7 @@ export class Receipt {
 
     constructor() {
         this.id = 0;
+        this.userId = null;
         this.merchant = '';
         this.receiptPhotoId = null;
         this.categoryId = null;

@@ -1,23 +1,12 @@
-<!-- <mat-tab-group >
-  <mat-tab label="Витрати по категоріях">
-    <div class="tab-content">
-      <app-category-chart></app-category-chart>
-    </div>
-  </mat-tab>
-  <mat-tab label="Витрати за весь час">
-    <div class="tab-content">
-      <app-category-chart></app-category-chart>
-    </div>
-  </mat-tab>
-</mat-tab-group>
-<app-period-chart></app-period-chart> -->
-
 <nav mat-tab-nav-bar>
   <a mat-tab-link [routerLink]="['categories']">
     Витрати по категоріях
   </a>
   <a mat-tab-link [routerLink]="['periods']">
     Витрати за весь час
+  </a>
+  <a mat-tab-link [routerLink]="['dinamics']">
+    Динаміка витрат 
   </a>
 </nav>
 <router-outlet></router-outlet>

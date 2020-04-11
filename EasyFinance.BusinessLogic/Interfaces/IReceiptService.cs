@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using EasyFinance.BusinessLogic.Models;
 using EasyFinance.DataAccess.Entities;
 
 namespace EasyFinance.BusinessLogic.Interfaces
@@ -8,11 +9,13 @@ namespace EasyFinance.BusinessLogic.Interfaces
     {
         Task<Receipt> GetReceiptAsync(int id);
 
-        Task<IEnumerable<Receipt>> GetReceiptsAsync();
+        Task<IEnumerable<Receipt>> GetReceiptsAsync(int? userId = null);
 
-        Task<IEnumerable<object>> GetExpensesByCategoriesAsync();
+        Task<IEnumerable<Receipt>> GetReceiptsByUserIdAsync(int userId);
 
-        Task<IEnumerable<object>> GetExpensesByAllPeriodAsync();
+        Task<IEnumerable<object>> GetExpensesByCategoriesAsync(int userId);
+
+        Task<IEnumerable<ExpensePeriod>> GetExpensesForPeriodAsync(int userId, bool includeEachDay=false);
 
         Task AddReceiptAsync(Receipt receipt);
 
