@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.IO;
 using EasyFinance.OCR.Helpers;
 using EasyFinance.OCR.Interfaces;
 using Tesseract;
@@ -8,10 +9,11 @@ namespace EasyFinance.OCR.Services
     public class TesseractOCRService: IOCRService
     {
         private readonly TesseractEngine _tesseractEngine;
-        private readonly string _tessdataPath = @"C:\Users\Ivan_Freiuk\Desktop\DIPLOMA\repository\EasyFinance\EasyFinance.OCR\Tessdata";
+        private readonly string _tessdataPath;
 
         public TesseractOCRService()
         {
+            _tessdataPath = Path.GetFullPath(@".\..\EasyFinance.OCR\Tessdata");
             _tesseractEngine = new TesseractEngine(_tessdataPath, "ukr", EngineMode.Default);
         }
 
