@@ -42,10 +42,10 @@ namespace EasyFinance
             services.Configure<CustomVisionSecrets>(customVisionSecrets);
            
             #region Add Entity Framework and Identity Framework
-
+            
             services.AddDbContext<EasyFinanceDbContext>(options =>
             {
-                options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=EasyFinanceDB;Trusted_Connection=True;",
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("EasyFinance"));
             });
 

@@ -13,7 +13,7 @@ namespace EasyFinance.OCR.Services
 
         public TesseractOCRService()
         {
-            _tessdataPath = Path.GetFullPath(@".\..\EasyFinance.OCR\Tessdata");
+            _tessdataPath = Path.GetFullPath(@"..\EasyFinance.OCR\Tessdata");
             _tesseractEngine = new TesseractEngine(_tessdataPath, "ukr", EngineMode.Default);
         }
 
