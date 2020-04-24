@@ -6,6 +6,7 @@ import { FileHelper } from 'src/app/helpers/file-helper';
 import { ReceiptView } from 'src/app/models/receipt-view';
 import { map } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
+import { ReceiptFilterCriteria } from 'src/app/models/receipt-filter-criteria';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,31 @@ export class ReceiptService {
           return receipts;
         })
       )
+  }
+
+  getFilteredReceipts(filterCriteria: ReceiptFilterCriteria) {
+    return this.http.post(`${this.apiUrl}/receipts/filter`, filterCriteria)
+    .pipe<ReceiptView[]>(
+      map((data: Receipt[]) => {
+        let receipts = new Array<ReceiptView>();
+        data.forEach((receipt: Receipt) => {
+          let receiptView = new ReceiptView();
+          receiptView.id = receipt.id;
+          receiptView.imageURL = receipt.receiptPhotoId ?
+            this.fileHelper.getImageSafeURL(receipt.receiptPhoto.fileBytes, receipt.receiptPhoto.fileName) : null;
+          receiptView.merchant = receipt.merchant;
+          receiptView.categoryName = receipt.categoryId ? receipt.category.name : '(без категорії)';
+          receiptView.paymentMethodName = receipt.paymentMethodId ? receipt.paymentMethod.name : '(без способу оплати)';
+          receiptView.totalAmount = receipt.totalAmount;
+          receiptView.currencyGenericCode = receipt.currencyId ? receipt.currency.genericCode : null;
+          receiptView.purchaseDate = receipt.purchaseDate;
+          receiptView.description = receipt.description;
+
+          receipts.push(receiptView);
+        });
+        return receipts;
+      })
+    );
   }
 
   getExpensesByCategories(userId: number) {

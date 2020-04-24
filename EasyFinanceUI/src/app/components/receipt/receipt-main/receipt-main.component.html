@@ -7,6 +7,6 @@
       <button mat-raised-button color="accent" (click)="openDialog()">Додати чек</button>
     </div>
   </div>
-  <app-receipt-filter></app-receipt-filter>
+  <app-receipt-filter (filterCriteriaChanged)="onFilterCriteriaChanged($event)"></app-receipt-filter>
   <app-receipt-list></app-receipt-list>
 </div>

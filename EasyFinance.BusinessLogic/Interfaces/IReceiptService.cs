@@ -11,6 +11,8 @@ namespace EasyFinance.BusinessLogic.Interfaces
 
         Task<IEnumerable<Receipt>> GetReceiptsAsync(int? userId = null);
 
+        Task<IEnumerable<Receipt>> GetFilteredReceiptsAsync(ReceiptFilterCriteria filterCriteria);
+
         Task<IEnumerable<Receipt>> GetReceiptsByUserIdAsync(int userId);
 
         Task<IEnumerable<object>> GetExpensesByCategoriesAsync(int userId);

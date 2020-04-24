@@ -38,6 +38,22 @@ namespace EasyFinance.BusinessLogic.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Receipt>> GetFilteredReceiptsAsync(ReceiptFilterCriteria filterCriteria)
+        {
+            return await _context.Receipts
+                .Where(r => !filterCriteria.UserId.HasValue || r.UserId == filterCriteria.UserId)
+                .Where(r => !filterCriteria.DateFrom.HasValue || r.PurchaseDate >= filterCriteria.DateFrom)
+                .Where(r => !filterCriteria.DateTo.HasValue || r.PurchaseDate <= filterCriteria.DateTo)
+                .Where(r => !filterCriteria.TotalFrom.HasValue || r.TotalAmount >= filterCriteria.TotalFrom)
+                .Where(r => !filterCriteria.TotalTo.HasValue || r.TotalAmount <= filterCriteria.TotalTo)
+                .Where(r => !filterCriteria.CategoryId.HasValue || r.CategoryId == filterCriteria.CategoryId)
+                .Include(r => r.ReceiptPhoto)
+                .Include(r => r.PaymentMethod)
+                .Include(r => r.Category)
+                .Include(r => r.Currency)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Receipt>> GetReceiptsByUserIdAsync(int userId)
         {
             return await _context.Receipts
@@ -131,6 +147,6 @@ namespace EasyFinance.BusinessLogic.Services
             }
             
             return allPeriodExpenses;
-        }
+        }       
     }
 }

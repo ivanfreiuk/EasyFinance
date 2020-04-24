@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Microsoft.Extensions.Options;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
-
+using EasyFinance.BusinessLogic.Models;
 
 namespace EasyFinance.Controllers
 {
@@ -103,6 +103,19 @@ namespace EasyFinance.Controllers
             }
 
             return Ok(expensesByAllPeriod);
+        }
+
+        [HttpPost("filter")]
+        public async Task<IActionResult> GetFilteredReceipts(ReceiptFilterCriteria filterCriteria)
+        {
+            var receipts = await _receiptService.GetFilteredReceiptsAsync(filterCriteria);
+
+            if (receipts == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(receipts);
         }
 
         [HttpPost("create")]

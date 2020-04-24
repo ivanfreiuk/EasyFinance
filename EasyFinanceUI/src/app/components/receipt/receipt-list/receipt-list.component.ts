@@ -10,6 +10,7 @@ import { FormMode } from 'src/app/constants/form-mode';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/user/authentication.service';
+import { ReceiptFilterCriteria } from 'src/app/models/receipt-filter-criteria';
 
 @Component({
   selector: 'app-receipt-list',
@@ -21,15 +22,31 @@ export class ReceiptListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   observableData: Observable<ReceiptView[]>;
   public dataSource: MatTableDataSource<ReceiptView> = new MatTableDataSource<ReceiptView>();
+  private filterCriteria: ReceiptFilterCriteria;
 
-
-  constructor(public dialog: MatDialog,
+  constructor(private dialog: MatDialog,
     private changeDetectorRef: ChangeDetectorRef,
     private receiptSvc: ReceiptService,
-    private authSvc: AuthenticationService,
-    private photoSvc: ReceiptPhotoService,
-    private fileHelper: FileHelper) {
+    private authSvc: AuthenticationService) {
+      this.filterCriteria = new ReceiptFilterCriteria();
+      this.filterCriteria.userId = this.authSvc.currentUserValue.id;
+  }
 
+  get dataSourceValue() {
+    return this.dataSource.data;
+  }
+
+  set dataSourceValue(value: Array<ReceiptView>) {
+    this.dataSource.data = value;
+  }
+
+  get filterCriteriaValue() {
+    return this.filterCriteria;
+  }
+
+  set filterCriteriaValue(value: ReceiptFilterCriteria) {
+    this.filterCriteria = value;
+    this.refreshDataSource();
   }
 
   ngOnInit() {
@@ -62,12 +79,12 @@ export class ReceiptListComponent implements OnInit {
       data: { receiptId: id, formMode: FormMode.Edit }
     });
 
-    dialogRef.afterClosed().subscribe(i => this.refreshDataSource());
+    dialogRef.afterClosed().subscribe(() => this.refreshDataSource());
   }
 
   public refreshDataSource() {
-    this.receiptSvc.getAll(this.authSvc.currentUserValue.id).subscribe((data: ReceiptView[]) => {
-      this.dataSource.data = data;
+    this.receiptSvc.getFilteredReceipts(this.filterCriteria).subscribe((data: ReceiptView[]) => {
+      this.dataSourceValue = data;
     });
   }
 }
