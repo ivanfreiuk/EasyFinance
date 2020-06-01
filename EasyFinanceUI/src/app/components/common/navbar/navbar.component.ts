@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   
   title: string = 'Easy Finance'
   
-  constructor(private authService: AuthenticationService,
+  constructor(public authService: AuthenticationService,
     private router: Router) { }
 
   ngOnInit() {

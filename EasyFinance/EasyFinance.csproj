@@ -21,4 +21,12 @@
     <ProjectReference Include="..\EasyFinance.OCR\EasyFinance.OCR.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+
+
+    <Content Include="..\EasyFinance.OCR\Tessdata\ukr.traineddata" CopyToPublishDirectory="Always" />
+    <None Include="..\EasyFinance.OCR\Tessdata\ukr.traineddata" CopyToPublishDirectory="Always" />
+
+   </ItemGroup>
+
 </Project>

@@ -7,13 +7,14 @@ import { ReceiptView } from 'src/app/models/receipt-view';
 import { map } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { ReceiptFilterCriteria } from 'src/app/models/receipt-filter-criteria';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReceiptService {
 
-  private apiUrl: string = 'https://localhost:44398/api';
+  private apiUrl: string = `${environment.apiUrl}/api`; //'https://localhost:44398/api'
 
   constructor(private http: HttpClient, private fileHelper: FileHelper, private datePipe: DatePipe) { }
 

@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/0b952883-4497-489a-bfef-c990847d2325/resourceGroups/EasyFinanceResourceGroup/providers/Microsoft.Web/sites/EasyFinanceClient",
+    "appService.deploySubpath": "dist\\EasyFinanceUI"
+}

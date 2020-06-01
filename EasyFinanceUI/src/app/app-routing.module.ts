@@ -7,6 +7,8 @@ import { PeriodChartComponent } from './components/chart/period-chart/period-cha
 import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { DinamicChartComponent } from './components/chart/dinamic-chart/dinamic-chart.component';
+import { CanActivate } from '@angular/router/src/utils/preactivation';
+import { AuthGuard } from './guards/auth.guard';
 
 
 const routes: Routes = [
@@ -20,11 +22,13 @@ const routes: Routes = [
   },
   {
     path: 'receipts',
-    component: ReceiptMainComponent
+    component: ReceiptMainComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'statistic',
     component: ChartMainComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'categories', pathMatch: 'full' },
       { path: 'categories', component: CategoryChartComponent },

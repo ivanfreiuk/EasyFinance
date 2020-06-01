@@ -3,12 +3,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private apiUrl: string = 'https://localhost:44398/api'
+  private apiUrl: string = `${environment.apiUrl}/api`; //'https://localhost:44398/api'
   
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
