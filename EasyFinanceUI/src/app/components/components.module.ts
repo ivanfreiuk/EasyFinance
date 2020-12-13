@@ -17,7 +17,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NavbarComponent } from './common/navbar/navbar.component';
 import { ReceiptMainComponent } from './receipt/receipt-main/receipt-main.component';
@@ -35,6 +36,8 @@ import { AppRoutingModule } from '../app-routing.module';
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { DinamicChartComponent } from './chart/dinamic-chart/dinamic-chart.component';
+import { SpinnerOverlayComponent } from './common/spinner-overlay/spinner-overlay.component';
+
 
 @NgModule({
   declarations: [
@@ -49,7 +52,8 @@ import { DinamicChartComponent } from './chart/dinamic-chart/dinamic-chart.compo
     PeriodChartComponent,
     LoginComponent,
     RegisterComponent,
-    DinamicChartComponent
+    DinamicChartComponent,
+    SpinnerOverlayComponent
   ],
   imports: [
     AppRoutingModule,
@@ -75,6 +79,7 @@ import { DinamicChartComponent } from './chart/dinamic-chart/dinamic-chart.compo
     MatExpansionModule,
     MatTabsModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     NgxChartsModule
   ],
   exports: [
@@ -86,8 +91,8 @@ import { DinamicChartComponent } from './chart/dinamic-chart/dinamic-chart.compo
     ReceiptDialogComponent,
     ReceiptListComponent,
     ReceiptMainComponent,
-    PeriodChartComponent,   
-    DinamicChartComponent, 
+    PeriodChartComponent,
+    DinamicChartComponent,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,

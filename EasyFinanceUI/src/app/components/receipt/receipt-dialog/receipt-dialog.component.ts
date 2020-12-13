@@ -29,6 +29,7 @@ export class ReceiptDialogComponent implements OnInit {
   public currentReceipt: Receipt;
   private imageFile: File;
   private imageURL: any = 'assets/images/photo_upload.svg';
+  public scanningReceipt: boolean = false;
 
   receiptForm: FormGroup;
   formMode: FormMode;
@@ -118,15 +119,18 @@ export class ReceiptDialogComponent implements OnInit {
   }
 
   onGetAutoScanned() {
+    this.scanningReceipt = true;
     this.photoSvc.post(this.imageFile).subscribe((id: number) => {
       this.receiptSvc.autoScan(id).subscribe((data: Receipt) => {
         this.currentReceipt = data;
         this.receiptForm = this.createFormGroup(this.currentReceipt);
         this.formMode = FormMode.Edit;
-        this.showNotification(`Чек# ${data.id} успішно відскановано.`, 'Закрити')
+        this.showNotification(`Чек# ${data.id} успішно відскановано.`, 'Закрити');
+        this.scanningReceipt = false;
       },
         error => {
           this.showNotification('Помилка! Невдалося відсканувати чек.', 'Закрити');
+          this.scanningReceipt = false;
         });
     });
   }

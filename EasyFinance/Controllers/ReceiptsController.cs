@@ -10,7 +10,6 @@ using EasyFinance.Constans;
 using EasyFinance.DataAccess.Entities;
 using EasyFinance.DataAccess.Identity;
 using EasyFinance.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;

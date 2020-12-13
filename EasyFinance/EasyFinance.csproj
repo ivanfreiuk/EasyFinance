@@ -4,10 +4,12 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <UserSecretsId>a8868660-4e80-4875-ade9-7ecb1cfde9ec</UserSecretsId>
+    <ApplicationInsightsResourceId>/subscriptions/946553c4-9ffa-449b-8fdd-acccd4b63b3e/resourceGroups/easy-finance-group/providers/microsoft.insights/components/EasyFinanceApi</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction" Version="1.0.0" />
@@ -20,13 +22,5 @@
     <ProjectReference Include="..\EasyFinance.DataAccess\EasyFinance.DataAccess.csproj" />
     <ProjectReference Include="..\EasyFinance.OCR\EasyFinance.OCR.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-
-
-    <Content Include="..\EasyFinance.OCR\Tessdata\ukr.traineddata" CopyToPublishDirectory="Always" />
-    <None Include="..\EasyFinance.OCR\Tessdata\ukr.traineddata" CopyToPublishDirectory="Always" />
-
-   </ItemGroup>
 
 </Project>

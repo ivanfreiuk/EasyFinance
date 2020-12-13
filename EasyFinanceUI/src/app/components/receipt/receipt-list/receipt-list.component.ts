@@ -20,7 +20,8 @@ import { ReceiptFilterCriteria } from 'src/app/models/receipt-filter-criteria';
 export class ReceiptListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  observableData: Observable<ReceiptView[]>;
+  public loadingData: boolean = false;
+  public observableData: Observable<ReceiptView[]>;
   public dataSource: MatTableDataSource<ReceiptView> = new MatTableDataSource<ReceiptView>();
   private filterCriteria: ReceiptFilterCriteria;
 
@@ -28,8 +29,8 @@ export class ReceiptListComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private receiptSvc: ReceiptService,
     private authSvc: AuthenticationService) {
-      this.filterCriteria = new ReceiptFilterCriteria();
-      this.filterCriteria.userId = this.authSvc.currentUserValue.id;
+    this.filterCriteria = new ReceiptFilterCriteria();
+    this.filterCriteria.userId = this.authSvc.currentUserValue.id;
   }
 
   get dataSourceValue() {
@@ -50,12 +51,18 @@ export class ReceiptListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadingData = true;
     this.receiptSvc.getAll(this.authSvc.currentUserValue.id).subscribe((data: ReceiptView[]) => {
       this.dataSource = new MatTableDataSource<ReceiptView>(data);
       this.changeDetectorRef.detectChanges();
       this.dataSource.paginator = this.paginator;
       this.observableData = this.dataSource.connect();
-    });
+      this.loadingData = false;
+    },
+      () => {
+        this.loadingData = false;
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -83,8 +90,13 @@ export class ReceiptListComponent implements OnInit {
   }
 
   public refreshDataSource() {
+    this.loadingData = true;
     this.receiptSvc.getFilteredReceipts(this.filterCriteria).subscribe((data: ReceiptView[]) => {
       this.dataSourceValue = data;
-    });
+      this.loadingData = false;
+    },
+      () => {
+        this.loadingData = false;
+      });
   }
 }

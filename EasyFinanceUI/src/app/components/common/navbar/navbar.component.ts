@@ -23,7 +23,9 @@ export class NavbarComponent implements OnInit {
   }
 
   onMenuButtonClick() {
-    this.menuButtonClick.emit();
+    if(this.authService.currentUserValue) {
+      this.menuButtonClick.emit();
+    }      
   }
 
   logout() {

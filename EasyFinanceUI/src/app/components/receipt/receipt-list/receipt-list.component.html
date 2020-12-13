@@ -1,4 +1,6 @@
 <div class="bootstrap-wrapper">
+  <app-spinner-overlay overlay="true" *ngIf="loadingData">
+  </app-spinner-overlay>
   <div class="centered">
     <div class="cards">
       <mat-card class="card" *ngFor="let receipt of observableData | async">
@@ -34,14 +36,19 @@
         </mat-card-content>
         
         <div class="row">
-          <div class="col-8">
+          <div class="col-6">
             <mat-chip-list>
               <mat-chip color="accent" selected>
                 <mat-icon>money</mat-icon><strong>{{receipt.totalAmount}} {{receipt.currencyGenericCode}}</strong>
               </mat-chip>
             </mat-chip-list>
           </div>
-          <div class="col-4">
+          <div class="col-3">
+            <button mat-stroked-button color="warn" (click)="onReceiptDelete(receipt.id)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+          <div class="col-3">
             <button mat-stroked-button color="primary" (click)="openDialog(receipt.id)">
               <mat-icon>crop_free</mat-icon>
             </button>
@@ -49,7 +56,7 @@
         </div>
       </mat-card>
     </div>
-    <mat-paginator [pageSizeOptions]="[12, 20, 32]"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[12, 20, 32]" *ngIf="dataSource.data"></mat-paginator>
   </div>
 </div>
 

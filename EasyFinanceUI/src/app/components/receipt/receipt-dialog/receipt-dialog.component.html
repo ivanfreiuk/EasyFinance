@@ -1,4 +1,6 @@
 <div class="bootstrap-wrapper">
+  <app-spinner-overlay overlay="true" *ngIf="scanningReceipt">
+  </app-spinner-overlay>
   <form [formGroup]="receiptForm" *ngIf="currentReceipt">
     <div class="row">
       <div class="col-12">
